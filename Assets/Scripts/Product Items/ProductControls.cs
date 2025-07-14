@@ -48,6 +48,10 @@ public class ProductControls : MonoBehaviour
             }
         }
     }
+    public void ResetToStartPosition()
+    {
+        transform.position = _startDragPos;
+    }
 
     private Vector3 GetMousePositionInWorldSpace()
     {

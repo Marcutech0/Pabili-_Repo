@@ -1,10 +1,13 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class ProductControls : MonoBehaviour
 {
     private Collider2D _coll;
     private Vector3 _startDragPos;
     private bool _isDragging = false;
+
+    [Header("Product Data")]
+    public ProductData productData;
 
     void Start()
     {
@@ -35,19 +38,39 @@ public class ProductControls : MonoBehaviour
             _isDragging = false;
             _coll.enabled = false;
 
-            Collider2D hit = Physics2D.OverlapPoint(transform.position);
+            Collider2D hit = Physics2D.OverlapCircle(transform.position, 0.2f);
             _coll.enabled = true;
 
-            if (hit != null && hit.TryGetComponent(out ProductDropZone dropZone))
+            if (hit != null)
             {
-                dropZone.OnProductDrop(this);
+                Debug.Log($"👀 Hit object: {hit.name}");
+
+                Component[] all = hit.GetComponents<Component>();
+                foreach (var comp in all)
+                    Debug.Log("📌 Hit has component: " + comp.GetType());
+
+                ProductDropZone dropZone = hit.GetComponent<ProductDropZone>() as ProductDropZone;
+
+                if (dropZone != null)
+                {
+                    Debug.Log("📦 Dropped on a valid drop zone!");
+                    dropZone.OnProductDrop(this);
+                    return;
+                }
+                else
+                {
+                    Debug.LogWarning("⚠️ Drop zone component not found on hit object!");
+                }
             }
             else
             {
-                transform.position = _startDragPos;
+                Debug.LogWarning("❌ No collider found at drop location: " + transform.position);
             }
+
+            transform.position = _startDragPos;
         }
     }
+
     public void ResetToStartPosition()
     {
         transform.position = _startDragPos;

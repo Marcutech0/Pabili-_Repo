@@ -9,11 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 598151bfbbc56b5459bacf4633634b7c, type: 3}
-  m_Name: Candy_Item
+  m_Script: {fileID: 11500000, guid: 7fab74a5014f21044ae3b4a3b7508916, type: 3}
+  m_Name: Coffee
   m_EditorClassIdentifier: 
-  productName: Candy
-  productImage: {fileID: -2757008047180432429, guid: bce8dcd2f412a1d4ea8cefe75f0d1577, type: 3}
-  description: Candy
-  price: 2
-  maxStack: 1
+  productName: Coffee
+  price: 40
+  icon: {fileID: 4687309882487268517, guid: f2a63f7a25163ce4db933bafbdeafcd4, type: 3}

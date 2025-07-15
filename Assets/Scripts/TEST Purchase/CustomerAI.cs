@@ -4,8 +4,8 @@ using System.Collections.Generic;
 public class CustomerAI : MonoBehaviour
 {
     [Header("Requested Products")]
-    public List<ProductData> desiredProducts = new List<ProductData>();  // 👈 Now a list
-    public List<ProductData> receivedProducts = new List<ProductData>(); // 👈 Track fulfilled items
+    public List<ProductData> desiredProducts = new List<ProductData>(); 
+    public List<ProductData> receivedProducts = new List<ProductData>(); 
 
     [Header("Payment Info")]
     public float moneyGiven;
@@ -17,7 +17,6 @@ public class CustomerAI : MonoBehaviour
         receivedProducts.Clear();
         isServed = false;
 
-        // Total price + random overpay
         float total = 0f;
         foreach (var p in desiredProducts)
         {
@@ -26,7 +25,6 @@ public class CustomerAI : MonoBehaviour
 
         moneyGiven = total + Random.Range(1, 5);
 
-        // Log request
         string productList = string.Join(", ", desiredProducts.ConvertAll(p => p.productName));
         Debug.Log($"🧍 Customer wants: {productList} | Paid: {moneyGiven}");
     }

@@ -5,8 +5,7 @@ public class TestCustomerTrigger : MonoBehaviour
 {
     public CustomerAI customer;
     public ProductData[] products;
-    public int numberOfItemsToRequest = 2; // How many random items the customer should request
-
+    public int numberOfItemsToRequest = 2;
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.R))
@@ -17,10 +16,8 @@ public class TestCustomerTrigger : MonoBehaviour
                 return;
             }
 
-            // Clamp the requested amount to not exceed available products
             int count = Mathf.Clamp(numberOfItemsToRequest, 1, products.Length);
 
-            // Generate a random selection of products (no duplicates)
             List<ProductData> selected = new List<ProductData>();
             List<int> usedIndices = new List<int>();
 

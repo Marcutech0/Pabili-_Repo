@@ -18,7 +18,6 @@ public class CustomerDropZone2 : MonoBehaviour, ProductDropZone
             Debug.Log("🎉 Transaction successful!");
             Destroy(product.gameObject);
 
-            // Show the cashier panel so player can give change
             if (CashierUI.Instance != null)
             {
                 CashierUI.Instance.OpenUI(customer.moneyGiven, product.productData.price);

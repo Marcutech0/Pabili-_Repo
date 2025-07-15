@@ -22,7 +22,6 @@ public class ProductShop : MonoBehaviour
     {
         foreach (var shopItem in shopProducts)
         {
-            //UpdateUI(shopItem);
             shopItem.buyButton.onClick.AddListener(() => BuyProduct(shopItem.product));
         }
     }

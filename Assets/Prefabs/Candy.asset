@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Candy
   m_EditorClassIdentifier: 
   productName: Candy
-  price: 20
+  price: 10
   icon: {fileID: -2757008047180432429, guid: bce8dcd2f412a1d4ea8cefe75f0d1577, type: 3}

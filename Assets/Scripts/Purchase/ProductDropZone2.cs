@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Linq; // Needed for .Contains()
 
 public class CustomerDropZone2 : MonoBehaviour, ProductDropZone
 {
@@ -13,14 +14,15 @@ public class CustomerDropZone2 : MonoBehaviour, ProductDropZone
             return;
         }
 
-        if (customer.ReceiveProduct(product.productData))
+        if (customer.desiredProducts.Contains(product.productData))
         {
-            Debug.Log("🎉 Transaction successful!");
-            Destroy(product.gameObject);
+            Debug.Log("🕒 Customer accepted item. Waiting for correct change...");
 
             if (CashierUI.Instance != null)
             {
                 CashierUI.Instance.OpenUI(customer.moneyGiven, product.productData.price);
+                CashierUI.Instance.currentCustomer = customer;
+                CashierUI.Instance.currentProductGO = product.gameObject;
             }
             else
             {
@@ -29,7 +31,7 @@ public class CustomerDropZone2 : MonoBehaviour, ProductDropZone
         }
         else
         {
-            Debug.Log("⚠️ Transaction failed. Customer didn't want this item.");
+            Debug.Log("❌ Wrong item delivered!");
             product.ResetToStartPosition();
         }
     }

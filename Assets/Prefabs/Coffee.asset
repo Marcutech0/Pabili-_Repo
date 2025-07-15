@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Coffee
   m_EditorClassIdentifier: 
   productName: Coffee
-  price: 40
+  price: 20
   icon: {fileID: 4687309882487268517, guid: f2a63f7a25163ce4db933bafbdeafcd4, type: 3}

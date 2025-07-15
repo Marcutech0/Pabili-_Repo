@@ -1,31 +1,66 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 public class CustomerAI : MonoBehaviour
 {
-    public ProductData desiredProduct;
+    [Header("Requested Products")]
+    public List<ProductData> desiredProducts = new List<ProductData>();  // 👈 Now a list
+    public List<ProductData> receivedProducts = new List<ProductData>(); // 👈 Track fulfilled items
+
+    [Header("Payment Info")]
     public float moneyGiven;
     public bool isServed;
 
-    public void RequestProduct(ProductData product)
+    public void RequestProducts(List<ProductData> products)
     {
-        desiredProduct = product;
-        moneyGiven = product.price + Random.Range(1, 5);
-        Debug.Log($"🧍 Customer wants: {desiredProduct.productName} | Paid: {moneyGiven}");
+        desiredProducts = new List<ProductData>(products);
+        receivedProducts.Clear();
+        isServed = false;
+
+        // Total price + random overpay
+        float total = 0f;
+        foreach (var p in desiredProducts)
+        {
+            total += p.price;
+        }
+
+        moneyGiven = total + Random.Range(1, 5);
+
+        // Log request
+        string productList = string.Join(", ", desiredProducts.ConvertAll(p => p.productName));
+        Debug.Log($"🧍 Customer wants: {productList} | Paid: {moneyGiven}");
     }
 
     public bool ReceiveProduct(ProductData product)
     {
-        if (isServed) return false;
-
-        if (product == desiredProduct)
+        if (isServed)
         {
-            isServed = true;
-            Debug.Log("✅ Customer received the correct item.");
+            Debug.Log("⚠️ Customer is already served.");
+            return false;
+        }
+
+        if (desiredProducts.Contains(product))
+        {
+            if (receivedProducts.Contains(product))
+            {
+                Debug.Log($"⚠️ Customer already received: {product.productName}");
+                return false;
+            }
+
+            receivedProducts.Add(product);
+            Debug.Log($"✅ Received correct item: {product.productName}");
+
+            if (receivedProducts.Count >= desiredProducts.Count)
+            {
+                isServed = true;
+                Debug.Log("🎉 All requested items received. Customer is satisfied!");
+            }
+
             return true;
         }
         else
         {
-            Debug.Log("❌ Wrong item delivered!");
+            Debug.Log($"❌ Wrong item: {product.productName} not in requested list.");
             return false;
         }
     }

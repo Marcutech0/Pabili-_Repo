@@ -5,6 +5,16 @@ public class Product : ScriptableObject
 {
     public string productName;
     public Sprite productImage;
-    public int stock;
+
+    [Header("Stock Settings")]
+    public int startingStock = 0;      
+    [HideInInspector] public int stock; 
+
     public int restockAmount = 10;
+
+    
+    public void ResetStock()
+    {
+        stock = startingStock;
+    }
 }

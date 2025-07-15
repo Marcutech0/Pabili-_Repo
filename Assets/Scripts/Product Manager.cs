@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class ProductManager : MonoBehaviour
 {
-    public Product[] products; // Assign all ScriptableObjects
+    public Product[] products; 
     public GameObject productCardPrefab;
     public Transform contentParent;
 

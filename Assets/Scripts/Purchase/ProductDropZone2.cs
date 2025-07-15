@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Linq; // Needed for .Contains()
+using System.Linq; 
 
 public class CustomerDropZone2 : MonoBehaviour, ProductDropZone
 {

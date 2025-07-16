@@ -3,15 +3,16 @@ using UnityEngine;
 
 public class InventoryManager : MonoBehaviour
 {
-    public List<Product> products = new List<Product>();
+    
+    public List<ProductData> products = new();  // Allows access to Product Data pool
 
-    public void AddProduct(Product product)
+    public void AddProduct(ProductData product)
     {
         products.Add(product);
         Debug.Log("Added " + product.productName);
     }
 
-    public void RemoveProduct(Product product)
+    public void RemoveProduct(ProductData product)
     {
         products.Remove(product);
         Debug.Log("Removed " + product.productName);

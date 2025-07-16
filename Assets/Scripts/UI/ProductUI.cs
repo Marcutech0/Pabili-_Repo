@@ -4,8 +4,9 @@ using TMPro;
 
 public class ProductUI : MonoBehaviour
 {
-    public Product product; // Link ScriptableObject here
+    public ProductData product; // Link products here
 
+    // Product UI Variables
     public Image productImage;
     public TMP_Text productNameText;
     public TMP_Text stockText;
@@ -19,14 +20,14 @@ public class ProductUI : MonoBehaviour
 
     void UpdateUI()
     {
-        productImage.sprite = product.productImage;
+        productImage.sprite = product.productIcon;
         productNameText.text = product.productName;
-        stockText.text = "Stock: " + product.stock;
+        stockText.text = "Stock: " + product.productStock;
     }
 
     void RestockProduct()
     {
-        product.stock += product.restockAmount;
+        product.productStock += product.productRestockAmount;
         UpdateUI();
     }
 }

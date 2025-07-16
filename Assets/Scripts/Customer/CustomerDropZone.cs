@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Linq; 
 
-public class CustomerDropZone2 : MonoBehaviour, ProductDropZone
+public class CustomerDropZone : MonoBehaviour, ProductDropZone
 {
     [Header("Customer who is waiting for the item")]
     public CustomerAI customer;
@@ -20,7 +20,7 @@ public class CustomerDropZone2 : MonoBehaviour, ProductDropZone
 
             if (CashierUI.Instance != null)
             {
-                CashierUI.Instance.OpenUI(customer.moneyGiven, product.productData.price);
+                CashierUI.Instance.OpenUI(customer.moneyGiven, product.productData.productPrice);
                 CashierUI.Instance.currentCustomer = customer;
                 CashierUI.Instance.currentProductGO = product.gameObject;
             }

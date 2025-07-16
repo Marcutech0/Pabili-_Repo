@@ -6660,7 +6660,7 @@ MonoBehaviour:
   candyPrefab: {fileID: 5963136060496908494, guid: 582d07ff9c0c9ef429d0eb6f2ac08f9a, type: 3}
   coffeeSlot: {fileID: 164187679}
   candySlot: {fileID: 870731623}
-  maxPerSlot: 10
+  maxPerSlot: 5
   verticalOffset: 0.2
 --- !u!4 &1774473810
 Transform:

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ProdictReleaseController : MonoBehaviour, ProductDropZone
+public class ProductReleaseController : MonoBehaviour, ProductDropZone
 {
     public void OnProductDrop(ProductControls _product)
     {

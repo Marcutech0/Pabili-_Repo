@@ -3,15 +3,16 @@ using TMPro;
 
 public class CurrencyManager : MonoBehaviour
 {
-    public static CurrencyManager Instance { get; private set; }
+    public static CurrencyManager Instance { get; private set; }    // Creates an instance for the class
 
-    [SerializeField] private float startingCurrency = 100f;
+    // Currency variables
+    private float startingCurrency = 100f;
     private float currentCurrency;
-
     public TextMeshProUGUI currencyText; 
 
     private void Awake()
     {
+        // Checks for instance issues and updates afterwards
         if (Instance == null)
         {
             Instance = this;

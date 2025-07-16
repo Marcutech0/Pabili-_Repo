@@ -11,9 +11,9 @@ public class ProductControls : MonoBehaviour
     public ProductData productData;
 
     [Header("Sway Settings")]
-    public float rotationLerpSpeed = 8f;
-    public float swayAmplitude = 10f; // degrees
-    public float swayFrequency = 8f;  // speed of sway
+    public float rotationLerpSpeed = 3f;
+    public float swayAmplitude = 3f; // degrees
+    public float swayFrequency = 3f;  // speed of sway
 
     private float swayTimer = 0f;
     private float targetAngle = 0f;
@@ -90,9 +90,8 @@ public class ProductControls : MonoBehaviour
                 foreach (var comp in all)
                     Debug.Log("📌 Hit has component: " + comp.GetType());
 
-                ProductDropZone dropZone = hit.GetComponent<ProductDropZone>() as ProductDropZone;
 
-                if (dropZone != null)
+                if (hit.GetComponent<ProductDropZone>() is ProductDropZone dropZone)
                 {
                     Debug.Log("📦 Dropped on a valid drop zone!");
                     dropZone.OnProductDrop(this);

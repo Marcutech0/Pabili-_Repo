@@ -2,6 +2,7 @@
 
 public class ProductControls : MonoBehaviour
 {
+    // Product Variables
     private Collider2D _coll;
     private Vector3 _startDragPos;
     private Vector3 _previousDragPos;
@@ -11,7 +12,7 @@ public class ProductControls : MonoBehaviour
     public ProductData productData;
 
     [Header("Sway Settings")]
-    public float rotationLerpSpeed = 3f;
+    public float rotationLerpSpeed = 1f;
     public float swayAmplitude = 3f; // degrees
     public float swayFrequency = 3f;  // speed of sway
 
@@ -35,15 +36,7 @@ public class ProductControls : MonoBehaviour
                 _startDragPos = transform.position;
                 _previousDragPos = GetMousePositionInWorldSpace();
                 _isDragging = true;
-                swayTimer = 0f; // Reset sway
-            }
-
-            if (hit != null && hit == _coll)
-            {
-                _startDragPos = transform.position;
-                _previousDragPos = GetMousePositionInWorldSpace();
-                _isDragging = true;
-                swayTimer = 0f;
+                swayTimer = 0f; // reset sway
                 transform.SetParent(null);
             }
         }
@@ -115,8 +108,7 @@ public class ProductControls : MonoBehaviour
 
     public void ResetToStartPosition()
     {
-        transform.position = _startDragPos;
-        transform.rotation = Quaternion.identity;
+        transform.SetPositionAndRotation(_startDragPos, Quaternion.identity);
     }
 
     private Vector3 GetMousePositionInWorldSpace()

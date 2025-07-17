@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class CustomerAI : MonoBehaviour
 {
+    //Customer Variables
     public ProductData[] desiredProducts;
     public float moneyGiven;
     public bool isServed;
@@ -10,9 +11,8 @@ public class CustomerAI : MonoBehaviour
     public void RequestProduct(ProductData product)
     {
         desiredProducts = new ProductData[] { product };
-        moneyGiven = product.productPrice + Random.Range(1, 5);
+        moneyGiven = product.productPrice; // or keep your random addition: product.productPrice + Random.Range(1, 5);
         isServed = false;
-
         Debug.Log($"🧍 Customer wants: {product.productName} | Paid: ₱{moneyGiven:F2}");
     }
 

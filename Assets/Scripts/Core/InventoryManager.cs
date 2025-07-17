@@ -3,18 +3,26 @@ using UnityEngine;
 
 public class InventoryManager : MonoBehaviour
 {
-    
-    public List<ProductData> products = new();  // Allows access to Product Data pool
+    [Header("Debug")]
+    public bool enableDebugLogs = true; // Toggle in Inspector
+
+    public List<ProductData> products = new();  // allows access to Product Data pool
+
+    // Allows debug logs for non-game breaking errors
+    private void Log(string message)
+    {
+        if (enableDebugLogs) Debug.Log(message);
+    }
 
     public void AddProduct(ProductData product)
     {
         products.Add(product);
-        Debug.Log("Added " + product.productName);
+        Log("Added " + product.productName);
     }
 
     public void RemoveProduct(ProductData product)
     {
         products.Remove(product);
-        Debug.Log("Removed " + product.productName);
+        Log("Removed " + product.productName);
     }
 }

@@ -3,26 +3,41 @@ using System.Collections.Generic;
 
 public class ShelfControl : MonoBehaviour, ProductDropZone
 {
-    private List<ProductControls> stackedProducts = new List<ProductControls>();
+    [Header("Debug")]
+    public bool enableDebugLogs = true; // Toggle in Inspector
+
+    private readonly List<ProductControls> stackedProducts = new();
 
     [Header("Stack Settings")]
     public float stackSpacing = 0.3f;       
-    public int maxStackSize = 5;            
+    public int maxStackSize = 5;
+
+    // Allows debug logs for non-game breaking errors
+    private void Log(string message)
+    {
+        if (enableDebugLogs) Debug.Log(message);
+    }
+
+    private void LogWarning(string message)
+    {
+        if (enableDebugLogs) Debug.LogWarning(message);
+    }
 
     public void OnProductDrop(ProductControls _product)
     {
         stackedProducts.RemoveAll(p => p == null);
-        Debug.Log("Cleaned shelf. Current count: " + stackedProducts.Count);
+        Log("Cleaned shelf. Current count: " + stackedProducts.Count);
 
+        // Checks if shelves are full, if so, item is returned
         if (stackedProducts.Contains(_product))
         {
-            Debug.Log("This product is already on the shelf.");
+            Log("This product is already on the shelf.");
             return;
         }
 
         if (stackedProducts.Count >= maxStackSize)
         {
-            Debug.Log("Shelf is full! Returning item.");
+            Log("Shelf is full! Returning item.");
             _product.ResetToStartPosition();
             return;
         }
@@ -30,10 +45,10 @@ public class ShelfControl : MonoBehaviour, ProductDropZone
         stackedProducts.Add(_product);
         _product.transform.SetParent(transform);
 
+        // Returns list of stacked items
         RestackItems();
-        Debug.Log("Product stacked on shelf. Total: " + stackedProducts.Count);
+        Log("Product stacked on shelf. Total: " + stackedProducts.Count);
     }
-
 
     public void RemoveProduct(ProductControls _product)
     {
@@ -42,7 +57,7 @@ public class ShelfControl : MonoBehaviour, ProductDropZone
             stackedProducts.Remove(_product);
             _product.transform.SetParent(null);
             RestackItems();
-            Debug.Log("Product removed. Remaining: " + stackedProducts.Count);
+            Log("Product removed. Remaining: " + stackedProducts.Count);
         }
     }
 

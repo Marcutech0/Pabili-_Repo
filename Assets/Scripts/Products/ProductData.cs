@@ -10,7 +10,8 @@ public class ProductData : ScriptableObject
 
     //Product variables
     public float productPrice;
+    public float restockPrice;
     public int productStock;
+    public int productRestockAmount;
     public int productMaxStack = 1;
-    public int productRestockAmount = 10;
 }

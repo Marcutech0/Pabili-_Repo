@@ -16,23 +16,38 @@ public class RestockManager : MonoBehaviour
 
     public void RestockCoffee()
     {
-        float cost = 10f; // Set your restock cost
+        ProductData coffeeData = coffeePrefab.GetComponent<ProductControls>().productData;
+        // Use the restockPrice from ProductData instead of hardcoded 10
+        float cost = coffeeData.restockPrice;
+
         if (CurrencyManager.Instance.SpendFunds(cost))
         {
-            Vector3 spawnPos = coffeeSlot.position + new Vector3(0, coffeeSlot.childCount * verticalOffset, 0);
-            Instantiate(coffeePrefab, spawnPos, Quaternion.identity, coffeeSlot);
+            for (int i = 0; i < coffeeData.productRestockAmount; i++)
+            {
+                Vector3 spawnPos = coffeeSlot.position + new Vector3(0, coffeeSlot.childCount * verticalOffset, 0);
+                Instantiate(coffeePrefab, spawnPos, Quaternion.identity, coffeeSlot);
+            }
         }
     }
 
     public void RestockCandy()
     {
+        ProductData candyData = candyPrefab.GetComponent<ProductControls>().productData;
+        float cost = candyData.restockPrice;
+
         if (candySlot.childCount >= maxPerSlot)
         {
             Debug.Log("Candy shelf is full!");
             return;
         }
 
-        Vector3 spawnPos = candySlot.position + new Vector3(0, candySlot.childCount * verticalOffset, 0);
-        Instantiate(candyPrefab, spawnPos, Quaternion.identity, candySlot);
+        if (CurrencyManager.Instance.SpendFunds(cost))
+        {
+            for (int i = 0; i < candyData.productRestockAmount; i++)
+            {
+                Vector3 spawnPos = candySlot.position + new Vector3(0, candySlot.childCount * verticalOffset, 0);
+                Instantiate(candyPrefab, spawnPos, Quaternion.identity, candySlot);
+            }
+        }
     }
 }

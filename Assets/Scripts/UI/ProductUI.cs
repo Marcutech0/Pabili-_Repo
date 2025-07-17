@@ -27,11 +27,18 @@ public class ProductUI : MonoBehaviour
 
     void RestockProduct()
     {
-        float restockCost = product.productPrice * product.productRestockAmount * 0.8f; // 20% discount for bulk
+        // Use restockPrice instead of calculating it
+        float restockCost = product.restockPrice;
+
         if (CurrencyManager.Instance.SpendFunds(restockCost))
         {
             product.productStock += product.productRestockAmount;
             UpdateUI();
+            Debug.Log($"Restocked {product.productRestockAmount} {product.productName} for {restockCost}");
+        }
+        else
+        {
+            Debug.LogWarning($"Not enough money to restock {product.productName}");
         }
     }
 }

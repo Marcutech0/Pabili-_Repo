@@ -13,5 +13,10 @@ MonoBehaviour:
   m_Name: Coffee
   m_EditorClassIdentifier: 
   productName: Coffee
-  price: 20
-  icon: {fileID: 4687309882487268517, guid: f2a63f7a25163ce4db933bafbdeafcd4, type: 3}
+  productDescription: Will kill you
+  productIcon: {fileID: 4687309882487268517, guid: f2a63f7a25163ce4db933bafbdeafcd4, type: 3}
+  productPrice: 6
+  restockPrice: 5
+  productStock: 0
+  productRestockAmount: 1
+  productMaxStack: 10

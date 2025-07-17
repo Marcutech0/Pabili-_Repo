@@ -16,21 +16,6 @@ public class CurrencyManager : MonoBehaviour
     [Header("UI")]
     public TextMeshProUGUI currencyText;
 
-    private void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-            currentCurrency = startingCurrency;
-            UpdateUI();
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
-
     // Allows debug logs for non-game breaking errors
     private void Log(string message)
     {
@@ -42,6 +27,12 @@ public class CurrencyManager : MonoBehaviour
         if (enableDebugLogs) Debug.LogWarning(message);
     }
 
+    private void LogError(string message)
+    {
+        if (enableDebugLogs) Debug.LogError(message);
+    }
+
+
     public void AddFunds(float amount)
     {
         currentCurrency += amount;
@@ -49,16 +40,33 @@ public class CurrencyManager : MonoBehaviour
         Log($"Added {currencySymbol}{amount:F2}. Total: {currencySymbol}{currentCurrency:F2}");
     }
 
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+            currentCurrency = startingCurrency;
+            UpdateUI();
+            Debug.Log($"CurrencyManager initialized with {currencySymbol}{currentCurrency:F2}");
+        }
+        else if (Instance != this)
+        {
+            Destroy(gameObject);
+        }
+    }
+
     public bool SpendFunds(float amount)
     {
+        Log($"Attempting to spend {amount} (Current: {currentCurrency})");
         if (currentCurrency >= amount)
         {
             currentCurrency -= amount;
             UpdateUI();
-            Log($"Spent {currencySymbol}{amount:F2}. Remaining: {currencySymbol}{currentCurrency:F2}");
+            Log($"Successfully spent {amount}. Remaining: {currentCurrency}");
             return true;
         }
-        LogWarning("Insufficient funds!");
+        LogWarning($"Insufficient funds! Tried to spend {amount} but only have {currentCurrency}");
         return false;
     }
 

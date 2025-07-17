@@ -20,34 +20,37 @@ public class CustomerDropZone : MonoBehaviour, ProductDropZone
         if (enableDebugLogs) Debug.LogWarning(message);
     }
 
+    private void LogError(string message)
+    {
+        if (enableDebugLogs) Debug.LogError(message);
+    }
+
+
     public void OnProductDrop(ProductControls product)
     {
-        // Checks for product data
         if (customer == null || product == null || product.productData == null)
         {
             LogWarning("Missing customer or product data.");
             return;
         }
 
-        // Once correct product is placed, customer will wait for change
         if (customer.desiredProducts.Contains(product.productData))
         {
-            Log("🕒 Customer accepted item. Waiting for correct change...");
+            Log("Customer accepted item. Waiting for correct change...");
 
             if (CashierUI.Instance != null)
             {
-                CashierUI.Instance.OpenUI(customer.moneyGiven, product.productData.productPrice);
+                // Only pass the values, don't add money yet
+                CashierUI.Instance.OpenUI(
+                    customer.moneyGiven,
+                    product.productData.productPrice
+                );
                 CashierUI.Instance.currentCustomer = customer;
                 CashierUI.Instance.currentProductGO = product.gameObject;
-            }
-            else
-            {
-                LogWarning("Cashier UI is not assigned or not in scene.");
             }
         }
         else
         {
-            Log("❌ Wrong item delivered!");
             product.ResetToStartPosition();
         }
     }

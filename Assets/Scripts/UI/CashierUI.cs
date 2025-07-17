@@ -53,14 +53,14 @@ public class CashierUI : MonoBehaviour
         Time.timeScale = 0f;
 
         customerPaid = moneyGiven;
-        correctChange = moneyGiven - productPrice;
+        correctChange = moneyGiven - productPrice; // This should be positive (customer paid more than price)
 
-        expectedChangeText.text = $"Change for ₱{moneyGiven:F2}";
+        expectedChangeText.text = $"Change for {CurrencyManager.Instance.currencySymbol}{moneyGiven:F2}";
         currentInput = "";
-        inputDisplayText.text = "₱0.00";
+        inputDisplayText.text = $"{CurrencyManager.Instance.currencySymbol}0.00";
         transactionSubmitted = false;
 
-        Log($"🧾 Cashier UI opened. Expecting change: ₱{correctChange:F2}");
+        Log($"Cashier UI opened. Expecting change: {CurrencyManager.Instance.currencySymbol}{correctChange:F2}");
     }
 
     public void AddDigit(string digit)
@@ -102,8 +102,8 @@ public class CashierUI : MonoBehaviour
 
         if (Mathf.Approximately(enteredAmount, correctChange))
         {
-            float productPrice = currentProductGO.GetComponent<ProductControls>().productData.productPrice;
-            CurrencyManager.Instance.AddFunds(productPrice);
+            // Only add the money now that transaction is complete
+            CurrencyManager.Instance.AddFunds(customerPaid); // Add the full amount customer paid
 
             if (currentCustomer != null)
                 currentCustomer.isServed = true;

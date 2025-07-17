@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
+    // UI variables
     public GameObject _pauseMenuPanel;
     public Button _continueButton;
     public Button _exit;
@@ -12,6 +13,7 @@ public class PauseMenu : MonoBehaviour
 
     void Start()
     {
+        // Activates menu items
         _pauseMenuPanel.SetActive(false);
         _continueButton.onClick.AddListener(ResumeGame);
         _exit.onClick.AddListener(ExitGame);
@@ -19,6 +21,7 @@ public class PauseMenu : MonoBehaviour
 
     void Update()
     {
+        // Pauses game on escape
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (isPaused)

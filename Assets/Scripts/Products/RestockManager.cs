@@ -7,8 +7,8 @@ public class RestockManager : MonoBehaviour
     public GameObject candyPrefab;
 
     [Header("Shelf Slots")]
-    public Transform coffeeSlot;  // Assign Slot1
-    public Transform candySlot;   // Assign Slot2
+    public Transform coffeeSlot;  // assign Slot 1
+    public Transform candySlot;   // assign Slot 2
 
     [Header("Settings")]
     public int maxPerSlot = 5;
@@ -16,14 +16,12 @@ public class RestockManager : MonoBehaviour
 
     public void RestockCoffee()
     {
-        if (coffeeSlot.childCount >= maxPerSlot)
+        float cost = 10f; // Set your restock cost
+        if (CurrencyManager.Instance.SpendFunds(cost))
         {
-            Debug.Log("Coffee shelf is full!");
-            return;
+            Vector3 spawnPos = coffeeSlot.position + new Vector3(0, coffeeSlot.childCount * verticalOffset, 0);
+            Instantiate(coffeePrefab, spawnPos, Quaternion.identity, coffeeSlot);
         }
-
-        Vector3 spawnPos = coffeeSlot.position + new Vector3(0, coffeeSlot.childCount * verticalOffset, 0);
-        Instantiate(coffeePrefab, spawnPos, Quaternion.identity, coffeeSlot);
     }
 
     public void RestockCandy()

@@ -3,11 +3,15 @@ using UnityEngine;
 
 public class CashierUI : MonoBehaviour
 {
+    [Header("Debug")]
+    public bool enableDebugLogs = true; // Toggle in Inspector
+
+    // CashierUI Variables
     public static CashierUI Instance;
 
     public GameObject panel;
     public TMP_Text expectedChangeText;
-    [SerializeField] public TMP_Text inputDisplayText;
+    public TMP_Text inputDisplayText;
 
     public float correctChange;
 
@@ -15,14 +19,32 @@ public class CashierUI : MonoBehaviour
     [HideInInspector] public GameObject currentProductGO;
 
     private string currentInput = "";
-    private float submittedAmount;
+    private readonly float submittedAmount;
     private float customerPaid;
 
     private bool transactionSubmitted = false;
 
     void Awake()
     {
-        Instance = this;
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    // Allows debug logs for non-game breaking errors
+    private void Log(string message)
+    {
+        if (enableDebugLogs) Debug.Log(message);
+    }
+
+    private void LogWarning(string message)
+    {
+        if (enableDebugLogs) Debug.LogWarning(message);
     }
 
     public void OpenUI(float moneyGiven, float productPrice)
@@ -38,21 +60,21 @@ public class CashierUI : MonoBehaviour
         inputDisplayText.text = "₱0.00";
         transactionSubmitted = false;
 
-        Debug.Log($"🧾 Cashier UI opened. Expecting change: ₱{correctChange:F2}");
+        Log($"🧾 Cashier UI opened. Expecting change: ₱{correctChange:F2}");
     }
 
     public void AddDigit(string digit)
     {
         if (transactionSubmitted)
         {
-            Debug.Log("⚠️ Transaction already submitted.");
+            Log("⚠️ Transaction already submitted.");
             return;
         }
 
         if (currentInput.Length < 7)
         {
             currentInput += digit;
-            Debug.Log($"🔢 Added digit: {digit} → Current input: {currentInput}");
+            Log($"🔢 Added digit: {digit} → Current input: {currentInput}");
             UpdateDisplay();
         }
     }
@@ -61,56 +83,38 @@ public class CashierUI : MonoBehaviour
     {
         if (transactionSubmitted)
         {
-            Debug.Log("⚠️ Cannot clear input. Transaction already submitted.");
+            Log("⚠️ Cannot clear input. Transaction already submitted.");
             return;
         }
 
         currentInput = "";
-        Debug.Log("🧽 Input cleared.");
+        Log("🧽 Input cleared.");
         UpdateDisplay();
     }
 
     public void SubmitChange()
     {
-        if (transactionSubmitted)
+        if (!float.TryParse(currentInput, out float enteredAmount))
         {
-            Debug.Log("⚠️ Already submitted.");
+            inputDisplayText.text = "❌ Invalid amount!";
             return;
         }
 
-        if (float.TryParse(currentInput, out submittedAmount))
+        if (Mathf.Approximately(enteredAmount, correctChange))
         {
-            if (Mathf.Approximately(submittedAmount, correctChange))
-            {
-                Debug.Log($"✅ Correct change submitted: ₱{submittedAmount:F2}");
+            float productPrice = currentProductGO.GetComponent<ProductControls>().productData.productPrice;
+            CurrencyManager.Instance.AddFunds(productPrice);
 
-                inputDisplayText.text = $"✅ Correct! ₱{submittedAmount:F2}";
+            if (currentCustomer != null)
+                currentCustomer.isServed = true;
 
-                // Finalize the transaction
-                if (currentCustomer != null)
-                {
-                    currentCustomer.isServed = true;
-                    Debug.Log("🎉 Customer marked as served.");
-                }
-
-                if (currentProductGO != null)
-                {
-                    Destroy(currentProductGO);
-                }
-
-                transactionSubmitted = true;
-                Invoke(nameof(CloseUI), 1.2f);
-            }
-            else
-            {
-                Debug.Log($"❌ Incorrect change. Submitted: ₱{submittedAmount:F2} | Expected: ₱{correctChange:F2}");
-                inputDisplayText.text = $"❌ Incorrect! You gave ₱{submittedAmount:F2}";
-            }
+            Destroy(currentProductGO);
+            inputDisplayText.text = $"✅ Correct! {CurrencyManager.Instance.currencySymbol}{enteredAmount:F2}";
+            Invoke(nameof(CloseUI), 1.5f);
         }
         else
         {
-            Debug.Log("❌ Invalid input, could not parse number.");
-            inputDisplayText.text = "❌ Invalid Input!";
+            inputDisplayText.text = $"❌ Try again! Expected: {CurrencyManager.Instance.currencySymbol}{correctChange:F2}";
         }
     }
 
@@ -121,7 +125,7 @@ public class CashierUI : MonoBehaviour
         else
             inputDisplayText.text = "₱0.00";
 
-        Debug.Log("🖋 UI Updated: Change: " + inputDisplayText.text);
+        Log("🖋 UI Updated: Change: " + inputDisplayText.text);
     }
 
     public void CloseUI()
@@ -129,7 +133,7 @@ public class CashierUI : MonoBehaviour
         Time.timeScale = 1f;
         panel.SetActive(false);
 
-        Debug.Log("📦 Cashier UI closed.");
+        Log("📦 Cashier UI closed.");
 
         // Reset state
         currentCustomer = null;

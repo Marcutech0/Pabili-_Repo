@@ -148,3 +148,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   productData: {fileID: 11400000, guid: e359b9d1410c4584d88945800196c5d9, type: 2}
+  rotationLerpSpeed: 1
+  swayAmplitude: 3
+  swayFrequency: 3

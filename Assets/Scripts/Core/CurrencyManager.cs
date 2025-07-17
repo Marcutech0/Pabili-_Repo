@@ -1,58 +1,72 @@
-using UnityEngine;
+﻿using UnityEngine;
 using TMPro;
 
 public class CurrencyManager : MonoBehaviour
 {
-    public static CurrencyManager Instance { get; private set; }    // Creates an instance for the class
+    [Header("Debug")]
+    public bool enableDebugLogs = true; // Toggle in Inspector
 
-    // Currency variables
-    private float startingCurrency = 100f;
+    public static CurrencyManager Instance { get; private set; }
+
+    [Header("Settings")]
+    public string currencySymbol = "₱";
+    public float startingCurrency = 100f;
     private float currentCurrency;
-    public TextMeshProUGUI currencyText; 
+
+    [Header("UI")]
+    public TextMeshProUGUI currencyText;
 
     private void Awake()
     {
-        // Checks for instance issues and updates afterwards
         if (Instance == null)
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+            currentCurrency = startingCurrency;
+            UpdateUI();
         }
         else
         {
             Destroy(gameObject);
         }
-
-        currentCurrency = startingCurrency;
-        UpdateCurrencyUI();
     }
 
-    public bool SpendCurrency(float amount)
+    // Allows debug logs for non-game breaking errors
+    private void Log(string message)
+    {
+        if (enableDebugLogs) Debug.Log(message);
+    }
+
+    private void LogWarning(string message)
+    {
+        if (enableDebugLogs) Debug.LogWarning(message);
+    }
+
+    public void AddFunds(float amount)
+    {
+        currentCurrency += amount;
+        UpdateUI();
+        Log($"Added {currencySymbol}{amount:F2}. Total: {currencySymbol}{currentCurrency:F2}");
+    }
+
+    public bool SpendFunds(float amount)
     {
         if (currentCurrency >= amount)
         {
             currentCurrency -= amount;
-            UpdateCurrencyUI();
+            UpdateUI();
+            Log($"Spent {currencySymbol}{amount:F2}. Remaining: {currencySymbol}{currentCurrency:F2}");
             return true;
         }
-        else
-        {
-            Debug.Log("Not enough money!");
-            return false;
-        }
+        LogWarning("Insufficient funds!");
+        return false;
     }
 
-    public void AddCurrency(float amount)
-    {
-        currentCurrency += amount;
-        UpdateCurrencyUI();
-    }
-
-    private void UpdateCurrencyUI()
+    private void UpdateUI()
     {
         if (currencyText != null)
-        {
-            currencyText.text = "Coins: $" + currentCurrency.ToString("F2");
-        }
+            currencyText.text = $"{currencySymbol}{currentCurrency:F2}";
     }
+
+    public float GetCurrentBalance() => currentCurrency;
 }

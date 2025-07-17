@@ -4,6 +4,9 @@ using UnityEngine.UI;
 using TMPro;
 public class ProductShop : MonoBehaviour
 {
+    [Header("Debug")]
+    public bool enableDebugLogs = true; // Toggle in Inspector
+
     public InventoryManager inventoryManager;   // Callout of "Inventory Manager"
     public GameObject productShopUI;    // Turns script into a GameObject
 
@@ -30,19 +33,40 @@ public class ProductShop : MonoBehaviour
         }
     }
 
-    /*void UpdateUI(ShopProductUI item)
+    // Allows debug logs for non-game breaking errors
+    private void Log(string message)
     {
-        item.nameText.text = item.product.productName;
-        item.priceText.text = "$" + item.product.price.ToString();
-        if (item.iconImage != null && item.product.productImage != null)
-            item.iconImage.sprite = item.product.productImage;
-    } */
+        if (enableDebugLogs) Debug.Log(message);
+    }
+
+    private void LogWarning(string message)
+    {
+        if (enableDebugLogs) Debug.LogWarning(message);
+    }
+
+    private void LogError(string message)
+    {
+        if (enableDebugLogs) Debug.LogError(message);
+    }
 
     void BuyProduct(ProductData product)
     {
-        // Expand this logic later (e.g., check currency, stack limits)
-        Debug.Log("Buying: " + product.productName);
-        inventoryManager.AddProduct(product);
+        if (CurrencyManager.Instance != null)
+        {
+            if (CurrencyManager.Instance.SpendFunds(product.productPrice))
+            {
+                inventoryManager.AddProduct(product);
+                Log($"Purchased: {product.productName}");
+            }
+            else
+            {
+                LogWarning("Not enough money to buy " + product.productName);
+            }
+        }
+        else
+        {
+            LogError("CurrencyManager instance not found!");
+        }
     }
 
     public void OpenProductShopUI()

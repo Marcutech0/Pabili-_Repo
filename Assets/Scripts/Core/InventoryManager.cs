@@ -3,19 +3,6 @@ using UnityEngine;
 
 public class InventoryManager : MonoBehaviour
 {
-    [Header("Debug")]
-    public bool enableDebugLogs = true; // Toggle in Inspector
-
-    private void Log(string message)
-    {
-        if (enableDebugLogs) Debug.LogWarning(message);
-    }
-
-    private void LogWarning(string message)
-    {
-        if (enableDebugLogs) Debug.LogError(message);
-    }
-
     [System.Serializable]
     public class InventoryItem
     {
@@ -36,7 +23,7 @@ public class InventoryManager : MonoBehaviour
         {
             inventory.Add(new InventoryItem { product = product, quantity = quantity });
         }
-        Log($"Added {quantity}x {product.productName}. Total: {existing?.quantity ?? quantity}");
+        Debug.Log($"Added {quantity}x {product.productName}. Total: {existing?.quantity ?? quantity}");
     }
 
     public bool RemoveProduct(ProductData product, int quantity = 1)
@@ -49,10 +36,10 @@ public class InventoryManager : MonoBehaviour
             {
                 inventory.Remove(item);
             }
-            Log($"Removed {quantity}x {product.productName}");
+            Debug.Log($"Removed {quantity}x {product.productName}");
             return true;
         }
-        LogWarning($"Couldn't remove {quantity}x {product.productName}");
+        Debug.LogWarning($"Couldn't remove {quantity}x {product.productName}");
         return false;
     }
 }

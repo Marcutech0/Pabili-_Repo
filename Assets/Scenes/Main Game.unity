@@ -1039,7 +1039,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94a3f3c4c37041f43983739da3043897, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebugLogs: 1
   inventory: []
 --- !u!4 &284398854
 Transform:
@@ -2223,7 +2222,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 432a0590fa85e4368922cb23a2b4cc47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableDebugLogs: 1
   currencySymbol: "\u20B1"
   startingCurrency: 100
   currencyText: {fileID: 446833460}
@@ -6250,7 +6248,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: P0.00
+  m_text: "\u20B10"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

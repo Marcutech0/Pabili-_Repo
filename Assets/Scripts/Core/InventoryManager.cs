@@ -6,23 +6,53 @@ public class InventoryManager : MonoBehaviour
     [Header("Debug")]
     public bool enableDebugLogs = true; // Toggle in Inspector
 
-    public List<ProductData> products = new();  // allows access to Product Data pool
-
-    // Allows debug logs for non-game breaking errors
     private void Log(string message)
     {
-        if (enableDebugLogs) Debug.Log(message);
+        if (enableDebugLogs) Debug.LogWarning(message);
     }
 
-    public void AddProduct(ProductData product)
+    private void LogWarning(string message)
     {
-        products.Add(product);
-        Log("Added " + product.productName);
+        if (enableDebugLogs) Debug.LogError(message);
     }
 
-    public void RemoveProduct(ProductData product)
+    [System.Serializable]
+    public class InventoryItem
     {
-        products.Remove(product);
-        Log("Removed " + product.productName);
+        public ProductData product;
+        public int quantity;
+    }
+
+    public List<InventoryItem> inventory = new();
+
+    public void AddProduct(ProductData product, int quantity = 1)
+    {
+        var existing = inventory.Find(i => i.product == product);
+        if (existing != null)
+        {
+            existing.quantity += quantity;
+        }
+        else
+        {
+            inventory.Add(new InventoryItem { product = product, quantity = quantity });
+        }
+        Log($"Added {quantity}x {product.productName}. Total: {existing?.quantity ?? quantity}");
+    }
+
+    public bool RemoveProduct(ProductData product, int quantity = 1)
+    {
+        var item = inventory.Find(i => i.product == product);
+        if (item != null && item.quantity >= quantity)
+        {
+            item.quantity -= quantity;
+            if (item.quantity <= 0)
+            {
+                inventory.Remove(item);
+            }
+            Log($"Removed {quantity}x {product.productName}");
+            return true;
+        }
+        LogWarning($"Couldn't remove {quantity}x {product.productName}");
+        return false;
     }
 }

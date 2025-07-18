@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5127771122691665908}
   - component: {fileID: 9128385786591747043}
   m_Layer: 0
-  m_Name: CoffeeObj
+  m_Name: CandyObj
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 5963136060496908494}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -4.92, y: -3.68, z: 0}
+  m_LocalPosition: {x: -4.66, y: -4.1, z: 0}
   m_LocalScale: {x: 0.3, y: 0.3, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -77,8 +77,8 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 3
-  m_Sprite: {fileID: 4687309882487268517, guid: f2a63f7a25163ce4db933bafbdeafcd4, type: 3}
+  m_SortingOrder: 5
+  m_Sprite: {fileID: -2757008047180432429, guid: bce8dcd2f412a1d4ea8cefe75f0d1577, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -127,7 +127,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 4.52, y: 1.61}
+    oldSize: {x: 3.18, y: 1.24}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -147,7 +147,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dd038a870118464da21e86f03695a72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  productData: {fileID: 11400000, guid: 9f9cda04b6066aa45b2c95bc19f305c7, type: 2}
+  productData: {fileID: 11400000, guid: e359b9d1410c4584d88945800196c5d9, type: 2}
   rotationLerpSpeed: 1
   swayAmplitude: 3
   swayFrequency: 3

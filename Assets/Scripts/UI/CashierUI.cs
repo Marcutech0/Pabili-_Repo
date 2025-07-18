@@ -13,14 +13,14 @@ public class CashierUI : MonoBehaviour
     public TMP_Text expectedChangeText;
     public TMP_Text inputDisplayText;
 
-    public float correctChange;
+    private int correctChange;
 
     [HideInInspector] public CustomerAI currentCustomer;
     [HideInInspector] public GameObject currentProductGO;
 
     private string currentInput = "";
-    private readonly float submittedAmount;
-    private float customerPaid;
+    private readonly int submittedAmount;
+    private int customerPaid;
 
     private bool transactionSubmitted = false;
 
@@ -47,7 +47,7 @@ public class CashierUI : MonoBehaviour
         if (enableDebugLogs) Debug.LogWarning(message);
     }
 
-    public void OpenUI(float moneyGiven, float productPrice)
+    public void OpenUI(int moneyGiven, int productPrice) // Changed parameters to int
     {
         panel.SetActive(true);
         Time.timeScale = 0f;
@@ -55,12 +55,12 @@ public class CashierUI : MonoBehaviour
         customerPaid = moneyGiven;
         correctChange = moneyGiven - productPrice;
 
-        expectedChangeText.text = $"Change for ₱{moneyGiven:F2}";
+        expectedChangeText.text = $"Change for {CurrencyManager.Instance.currencySymbol}{moneyGiven}";
         currentInput = "";
-        inputDisplayText.text = "₱0.00";
+        inputDisplayText.text = $"{CurrencyManager.Instance.currencySymbol}0";
         transactionSubmitted = false;
 
-        Log($"🧾 Cashier UI opened. Expecting change: ₱{correctChange:F2}");
+        Log($"Cashier UI opened. Expecting change: {CurrencyManager.Instance.currencySymbol}{correctChange}");
     }
 
     public void AddDigit(string digit)
@@ -94,7 +94,7 @@ public class CashierUI : MonoBehaviour
 
     public void SubmitChange()
     {
-        if (!float.TryParse(currentInput, out float enteredAmount))
+        if (!int.TryParse(currentInput, out int enteredAmount))
         {
             inputDisplayText.text = "❌ Invalid amount!";
             return;
@@ -102,8 +102,8 @@ public class CashierUI : MonoBehaviour
 
         if (Mathf.Approximately(enteredAmount, correctChange))
         {
-            float productPrice = currentProductGO.GetComponent<ProductControls>().productData.productPrice;
-            CurrencyManager.Instance.AddFunds(productPrice);
+            // Only add the money now that transaction is complete
+            CurrencyManager.Instance.AddFunds(customerPaid); // Add the full amount customer paid
 
             if (currentCustomer != null)
                 currentCustomer.isServed = true;
@@ -120,12 +120,18 @@ public class CashierUI : MonoBehaviour
 
     private void UpdateDisplay()
     {
-        if (!string.IsNullOrEmpty(currentInput) && float.TryParse(currentInput, out float val))
-            inputDisplayText.text = $"₱{val:F2}";
+        if (!string.IsNullOrEmpty(currentInput))
+        {
+            if (int.TryParse(currentInput, out int val))
+                inputDisplayText.text = $"{CurrencyManager.Instance.currencySymbol}{val}";
+            else
+                inputDisplayText.text = $"{CurrencyManager.Instance.currencySymbol}0";
+        }
         else
-            inputDisplayText.text = "₱0.00";
-
-        Log("🖋 UI Updated: Change: " + inputDisplayText.text);
+        {
+            inputDisplayText.text = $"{CurrencyManager.Instance.currencySymbol}0";
+        }
+        Log("UI Updated: Change: " + inputDisplayText.text);
     }
 
     public void CloseUI()
@@ -133,7 +139,7 @@ public class CashierUI : MonoBehaviour
         Time.timeScale = 1f;
         panel.SetActive(false);
 
-        Log("📦 Cashier UI closed.");
+        Log("Cashier UI closed.");
 
         // Reset state
         currentCustomer = null;

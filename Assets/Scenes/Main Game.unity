@@ -291,6 +291,7 @@ Transform:
   m_Children:
   - {fileID: 186077506}
   - {fileID: 1447509953}
+  - {fileID: 1079204173}
   - {fileID: 1040609503}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -790,12 +791,12 @@ MonoBehaviour:
   inventoryManager: {fileID: 284398853}
   productShopUI: {fileID: 180381346}
   shopProducts:
-  - product: {fileID: 11400000, guid: 7c59151d4ec03ce4bb48381b1dcdfdd8, type: 2}
+  - product: {fileID: 0}
     buyButton: {fileID: 1035368558}
     nameText: {fileID: 0}
     priceText: {fileID: 0}
     iconImage: {fileID: 0}
-  - product: {fileID: 11400000, guid: 0044f48c5782d4ca893ec9e42c901eb2, type: 2}
+  - product: {fileID: 0}
     buyButton: {fileID: 2024978132}
     nameText: {fileID: 0}
     priceText: {fileID: 0}
@@ -1039,7 +1040,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enableDebugLogs: 1
-  products: []
+  inventory: []
 --- !u!4 &284398854
 Transform:
   m_ObjectHideFlags: 0
@@ -1264,7 +1265,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u20B1100.00"
+  m_text: "\u20B1100"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2316,7 +2317,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 4
   m_Sprite: {fileID: -6390945422433265595, guid: e5697808dcbb41f4aaf672107048dcac, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -4509,8 +4510,8 @@ Transform:
   m_GameObject: {fileID: 963039847}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 10.472827, y: 4.1462502, z: 1}
+  m_LocalPosition: {x: -1.7906, y: 0.6095, z: 0}
+  m_LocalScale: {x: 18.232145, y: 2.9272525, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 589690470}
@@ -4558,7 +4559,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 0.26415092, g: 0.110219926, b: 0, a: 1}
   m_FlipX: 0
@@ -5264,6 +5265,53 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1072538279}
   m_CullTransparentMesh: 1
+--- !u!1 &1079204172
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1079204173}
+  - component: {fileID: 1079204174}
+  m_Layer: 0
+  m_Name: ProductLoader
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1079204173
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1079204172}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -2.54593, y: 0.11401999, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 114777954}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1079204174
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1079204172}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03979348fb58ea94fa9ed5caba1e1015, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  productPrefabs:
+  - {fileID: 5963136060496908494, guid: 582d07ff9c0c9ef429d0eb6f2ac08f9a, type: 3}
+  - {fileID: 5963136060496908494, guid: fe90547e5b0abcc4aaf45770befc5220, type: 3}
 --- !u!1 &1138707912
 GameObject:
   m_ObjectHideFlags: 0
@@ -5789,8 +5837,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -1009, y: 135}
-  m_SizeDelta: {x: 300, y: 180}
+  m_AnchoredPosition: {x: -169, y: 99}
+  m_SizeDelta: {x: 337.77, y: 202.66}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1447509952
 GameObject:
@@ -6014,7 +6062,6 @@ MonoBehaviour:
   panel: {fileID: 1988026095}
   expectedChangeText: {fileID: 1187999867}
   inputDisplayText: {fileID: 1608362970}
-  correctChange: 0
   currentCustomer: {fileID: 0}
   currentProductGO: {fileID: 0}
 --- !u!4 &1548942020
@@ -6068,8 +6115,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -282, y: -325}
-  m_SizeDelta: {x: 160, y: 30}
+  m_AnchoredPosition: {x: 528.66003, y: -350.93}
+  m_SizeDelta: {x: 180.14, y: 33.78}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1586501449
 MonoBehaviour:
@@ -6939,7 +6986,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 4
   m_Sprite: {fileID: -6390945422433265595, guid: e5697808dcbb41f4aaf672107048dcac, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -7014,12 +7061,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b7d0abfeb1bcdc488985e034d797d33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  coffeePrefab: {fileID: 5963136060496908494, guid: fe90547e5b0abcc4aaf45770befc5220, type: 3}
-  candyPrefab: {fileID: 5963136060496908494, guid: 582d07ff9c0c9ef429d0eb6f2ac08f9a, type: 3}
-  coffeeSlot: {fileID: 164187679}
-  candySlot: {fileID: 870731623}
-  maxPerSlot: 10
+  productLoader: {fileID: 1079204174}
+  shelfParent: {fileID: 342880472}
   verticalOffset: 0.2
+  maxProductsPerShelf: 5
 --- !u!4 &1774473810
 Transform:
   m_ObjectHideFlags: 0
@@ -7228,7 +7273,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 4
   m_Sprite: {fileID: -6390945422433265595, guid: e5697808dcbb41f4aaf672107048dcac, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -7693,11 +7738,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1774473809}
         m_TargetAssemblyTypeName: RestockManager, Assembly-CSharp
-        m_MethodName: RestockCoffee
-        m_Mode: 1
+        m_MethodName: RestockProduct
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 11400000, guid: 9f9cda04b6066aa45b2c95bc19f305c7, type: 2}
+          m_ObjectArgumentAssemblyTypeName: ProductData, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -7873,11 +7918,11 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1774473809}
         m_TargetAssemblyTypeName: RestockManager, Assembly-CSharp
-        m_MethodName: RestockCandy
-        m_Mode: 1
+        m_MethodName: RestockProduct
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 11400000, guid: e359b9d1410c4584d88945800196c5d9, type: 2}
+          m_ObjectArgumentAssemblyTypeName: ProductData, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -7929,6 +7974,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1795571720}
     m_Modifications:
+    - target: {fileID: 1257129368281490069, guid: 42dc383ac20587342a523a5b891d8786, type: 3}
+      propertyPath: m_SortingOrder
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 6511803236593212263, guid: 42dc383ac20587342a523a5b891d8786, type: 3}
       propertyPath: m_Name
       value: Top Shelf
@@ -8116,7 +8165,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 3
   m_Sprite: {fileID: 6955762181553778132, guid: 39cc91f03953bbe42ba9a3696fdd7ce1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -8137,8 +8186,8 @@ Transform:
   m_GameObject: {fileID: 2008341886}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.11816394, y: 2.1633146, z: 0}
-  m_LocalScale: {x: 4.0746207, y: 7.3582134, z: 1}
+  m_LocalPosition: {x: -1.792, y: 1.5422, z: 0}
+  m_LocalScale: {x: 7.201934, y: 13.005718, z: 1.76751}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 589690470}
@@ -8723,19 +8772,23 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1528147254875428227, guid: dccfc26ff9c4fa44cbae427590796029, type: 3}
       propertyPath: m_LocalScale.x
-      value: 2.1502178
+      value: 3.6579504
       objectReference: {fileID: 0}
     - target: {fileID: 1528147254875428227, guid: dccfc26ff9c4fa44cbae427590796029, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.85573065
+      value: 0.87823635
+      objectReference: {fileID: 0}
+    - target: {fileID: 1528147254875428227, guid: dccfc26ff9c4fa44cbae427590796029, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1528147254875428227, guid: dccfc26ff9c4fa44cbae427590796029, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 4.68431
+      value: 2.35
       objectReference: {fileID: 0}
     - target: {fileID: 1528147254875428227, guid: dccfc26ff9c4fa44cbae427590796029, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.73281
+      value: -3.1913
       objectReference: {fileID: 0}
     - target: {fileID: 1528147254875428227, guid: dccfc26ff9c4fa44cbae427590796029, type: 3}
       propertyPath: m_LocalPosition.z
@@ -8794,6 +8847,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1795571720}
     m_Modifications:
+    - target: {fileID: 1257129368281490069, guid: 42dc383ac20587342a523a5b891d8786, type: 3}
+      propertyPath: m_SortingOrder
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 6511803236593212263, guid: 42dc383ac20587342a523a5b891d8786, type: 3}
       propertyPath: m_Name
       value: Bottom Shelf
@@ -8861,7 +8918,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9072052086566170332, guid: c4dde0995bd937245997bdb6ed7c0682, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 4.71
+      value: 2.37
       objectReference: {fileID: 0}
     - target: {fileID: 9072052086566170332, guid: c4dde0995bd937245997bdb6ed7c0682, type: 3}
       propertyPath: m_LocalPosition.y
@@ -8914,7 +8971,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2573068457261629252, guid: 9cc460b490326794dbaadae173f5c463, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.35569006
+      value: 7.53
       objectReference: {fileID: 0}
     - target: {fileID: 2573068457261629252, guid: 9cc460b490326794dbaadae173f5c463, type: 3}
       propertyPath: m_LocalPosition.y
@@ -8954,7 +9011,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3358730204574656491, guid: 9cc460b490326794dbaadae173f5c463, type: 3}
       propertyPath: m_SortingOrder
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 3756400934314451720, guid: 9cc460b490326794dbaadae173f5c463, type: 3}
       propertyPath: m_Name

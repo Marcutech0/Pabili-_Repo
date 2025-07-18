@@ -23,41 +23,31 @@ public class ShelfControl : MonoBehaviour, ProductDropZone
         if (enableDebugLogs) Debug.LogWarning(message);
     }
 
-    public void OnProductDrop(ProductControls _product)
+    public void OnProductDrop(ProductControls productCtrl)
     {
-        stackedProducts.RemoveAll(p => p == null);
-        Log("Cleaned shelf. Current count: " + stackedProducts.Count);
-
-        // Checks if shelves are full, if so, item is returned
-        if (stackedProducts.Contains(_product))
+        // Check if we can add more of this product
+        if (productCtrl.productData.spawnedCount >= productCtrl.productData.productMaxStack ||
+            productCtrl.productData.spawnedCount >= productCtrl.productData.productStock)
         {
-            Log("This product is already on the shelf.");
+            Debug.Log("Cannot add product - max stack or stock limit reached");
+            productCtrl.ResetToStartPosition();
             return;
         }
 
-        if (stackedProducts.Count >= maxStackSize)
-        {
-            Log("Shelf is full! Returning item.");
-            _product.ResetToStartPosition();
-            return;
-        }
-
-        stackedProducts.Add(_product);
-        _product.transform.SetParent(transform);
-
-        // Returns list of stacked items
+        // Add to shelf
+        productCtrl.transform.SetParent(transform);
+        stackedProducts.Add(productCtrl);
+        productCtrl.productData.spawnedCount++;
         RestackItems();
-        Log("Product stacked on shelf. Total: " + stackedProducts.Count);
     }
 
-    public void RemoveProduct(ProductControls _product)
+    public void RemoveProduct(ProductControls productCtrl)
     {
-        if (stackedProducts.Contains(_product))
+        if (stackedProducts.Contains(productCtrl))
         {
-            stackedProducts.Remove(_product);
-            _product.transform.SetParent(null);
+            productCtrl.productData.spawnedCount--;
+            stackedProducts.Remove(productCtrl);
             RestackItems();
-            Log("Product removed. Remaining: " + stackedProducts.Count);
         }
     }
 

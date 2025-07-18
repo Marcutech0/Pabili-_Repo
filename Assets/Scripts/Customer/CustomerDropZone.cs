@@ -20,35 +20,44 @@ public class CustomerDropZone : MonoBehaviour, ProductDropZone
         if (enableDebugLogs) Debug.LogWarning(message);
     }
 
+    private void LogError(string message)
+    {
+        if (enableDebugLogs) Debug.LogError(message);
+    }
+
     public void OnProductDrop(ProductControls product)
     {
-        // Checks for product data
         if (customer == null || product == null || product.productData == null)
         {
             LogWarning("Missing customer or product data.");
             return;
         }
 
-        // Once correct product is placed, customer will wait for change
         if (customer.desiredProducts.Contains(product.productData))
         {
-            Log("🕒 Customer accepted item. Waiting for correct change...");
+            // Update the product stock
+            product.productData.ModifyStock(-1); // This will trigger the OnStockChanged event
 
-            if (CashierUI.Instance != null)
+            Log("Customer accepted item. Product stock reduced.");
+
+            if (Mathf.Approximately(customer.moneyGiven, product.productData.productPrice))
             {
-                CashierUI.Instance.OpenUI(customer.moneyGiven, product.productData.productPrice);
-                CashierUI.Instance.currentCustomer = customer;
-                CashierUI.Instance.currentProductGO = product.gameObject;
+                // Exact change case
+                CurrencyManager.Instance.AddFunds(customer.moneyGiven);
+                customer.isServed = true;
+                Destroy(product.gameObject);
+                CashierUI.Instance.CloseUI(); // Call through the Instance
             }
             else
             {
-                LogWarning("Cashier UI is not assigned or not in scene.");
+                // Needs change case - don't close UI here
+                CashierUI.Instance.OpenUI(
+                    customer.moneyGiven,
+                    product.productData.productPrice
+                );
+                CashierUI.Instance.currentCustomer = customer;
+                CashierUI.Instance.currentProductGO = product.gameObject;
             }
-        }
-        else
-        {
-            Log("❌ Wrong item delivered!");
-            product.ResetToStartPosition();
         }
     }
 }

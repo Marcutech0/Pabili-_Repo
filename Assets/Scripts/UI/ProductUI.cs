@@ -4,9 +4,10 @@ using TMPro;
 
 public class ProductUI : MonoBehaviour
 {
-    public ProductData product; // Link products here
+    public ProductData product;
+    public RestockManager restockManager;
 
-    // Product UI Variables
+    [Header("UI References")]
     public Image productImage;
     public TMP_Text productNameText;
     public TMP_Text stockText;
@@ -22,15 +23,15 @@ public class ProductUI : MonoBehaviour
     {
         productImage.sprite = product.productIcon;
         productNameText.text = product.productName;
-        stockText.text = "Stock: " + product.productStock;
+        stockText.text = $"In Stock: {product.productStock}/{product.productMaxStack}";
+        buyButton.interactable = product.productStock < product.productMaxStack;
     }
 
     void RestockProduct()
     {
-        float restockCost = product.productPrice * product.productRestockAmount * 0.8f; // 20% discount for bulk
-        if (CurrencyManager.Instance.SpendFunds(restockCost))
+        if (restockManager != null)
         {
-            product.productStock += product.productRestockAmount;
+            restockManager.RestockProduct(product);
             UpdateUI();
         }
     }

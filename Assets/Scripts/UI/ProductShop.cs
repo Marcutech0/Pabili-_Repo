@@ -10,8 +10,23 @@ public class ProductShop : MonoBehaviour
     public InventoryManager inventoryManager;   // Callout of "Inventory Manager"
     public GameObject productShopUI;    // Turns script into a GameObject
 
-    [System.Serializable]
+    // Allows debug logs for non-game breaking errors
+    private void Log(string message)
+    {
+        if (enableDebugLogs) Debug.Log(message);
+    }
 
+    private void LogWarning(string message)
+    {
+        if (enableDebugLogs) Debug.LogWarning(message);
+    }
+
+    private void LogError(string message)
+    {
+        if (enableDebugLogs) Debug.LogError(message);
+    }
+
+    [System.Serializable]
     //Add ShopProductUI into its own group for list generation
     public class ShopProductUI
     {
@@ -33,34 +48,22 @@ public class ProductShop : MonoBehaviour
         }
     }
 
-    // Allows debug logs for non-game breaking errors
-    private void Log(string message)
-    {
-        if (enableDebugLogs) Debug.Log(message);
-    }
-
-    private void LogWarning(string message)
-    {
-        if (enableDebugLogs) Debug.LogWarning(message);
-    }
-
-    private void LogError(string message)
-    {
-        if (enableDebugLogs) Debug.LogError(message);
-    }
-
     void BuyProduct(ProductData product)
     {
         if (CurrencyManager.Instance != null)
         {
+            // Use product.productPrice instead of any other field
             if (CurrencyManager.Instance.SpendFunds(product.productPrice))
             {
                 inventoryManager.AddProduct(product);
-                Log($"Purchased: {product.productName}");
+                Log($"Purchased: {product.productName} for {CurrencyManager.Instance.currencySymbol}{product.productPrice:F2}");
+
+                // Optional: Spawn physical product if needed
+                // Instantiate(productPrefab, spawnPosition, Quaternion.identity);
             }
             else
             {
-                LogWarning("Not enough money to buy " + product.productName);
+                LogWarning($"Not enough money to buy {product.productName} (Cost: {product.productPrice}, Have: {CurrencyManager.Instance.GetCurrentBalance()})");
             }
         }
         else

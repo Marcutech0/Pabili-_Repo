@@ -105,6 +105,13 @@ public class ProductControls : MonoBehaviour
             transform.rotation = Quaternion.identity;
         }
     }
+    void OnDestroy()
+    {
+        if (productData != null)
+        {
+            productData.spawnedCount--;
+        }
+    }
 
     public void ResetToStartPosition()
     {

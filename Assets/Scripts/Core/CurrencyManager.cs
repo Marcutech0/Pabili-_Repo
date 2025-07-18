@@ -10,8 +10,8 @@ public class CurrencyManager : MonoBehaviour
 
     [Header("Settings")]
     public string currencySymbol = "₱";
-    public float startingCurrency = 100f;
-    private float currentCurrency;
+    public int startingCurrency = 100;
+    private int currentCurrency;
 
     [Header("UI")]
     public TextMeshProUGUI currencyText;
@@ -33,11 +33,11 @@ public class CurrencyManager : MonoBehaviour
     }
 
 
-    public void AddFunds(float amount)
+    public void AddFunds(int amount)
     {
         currentCurrency += amount;
         UpdateUI();
-        Log($"Added {currencySymbol}{amount:F2}. Total: {currencySymbol}{currentCurrency:F2}");
+        Log($"Added {currencySymbol}{amount}. Total: {currencySymbol}{currentCurrency}");
     }
 
     void Awake()
@@ -56,7 +56,7 @@ public class CurrencyManager : MonoBehaviour
         }
     }
 
-    public bool SpendFunds(float amount)
+    public bool SpendFunds(int amount)
     {
         Log($"Attempting to spend {amount} (Current: {currentCurrency})");
         if (currentCurrency >= amount)
@@ -73,8 +73,14 @@ public class CurrencyManager : MonoBehaviour
     private void UpdateUI()
     {
         if (currencyText != null)
-            currencyText.text = $"{currencySymbol}{currentCurrency:F2}";
+            currencyText.text = $"{currencySymbol}{currentCurrency}"; // Removed :F2 formatting
     }
 
-    public float GetCurrentBalance() => currentCurrency;
+    public int GetCurrentBalance() => currentCurrency;
+
+    public void ResetCurrency()
+    {
+        currentCurrency = startingCurrency;
+        UpdateUI();
+    }
 }

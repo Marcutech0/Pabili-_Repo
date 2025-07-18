@@ -1,19 +1,36 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class ProductManager : MonoBehaviour
 {
-    public ProductData[] products;  // Assigns all products
-    public GameObject productCardPrefab;    // Makes a gameobject of the products
-    public Transform contentParent;     // Parents content to gameobject
+    public ProductLoader productLoader;
+    public GameObject productCardPrefab;
+    public Transform contentParent;
+    public RestockManager restockManager;
 
     void Start()
     {
-        //Apply for all product instances
-        foreach (var product in products)
+        CreateProductUI();
+    }
+
+    public void ShowCategory(ProductData.ProductCategory category)
+    {
+        foreach (Transform child in contentParent)
         {
+            var ui = child.GetComponent<ProductUI>();
+            child.gameObject.SetActive(ui.product.category == category);
+        }
+    }
+
+    void CreateProductUI()
+    {
+        foreach (var prefab in productLoader.productPrefabs)
+        {
+            var productData = prefab.GetComponent<ProductControls>().productData;
             GameObject card = Instantiate(productCardPrefab, contentParent);
             ProductUI ui = card.GetComponent<ProductUI>();
-            ui.product = product;
+            ui.product = productData;
+            ui.restockManager = restockManager;
         }
     }
 }

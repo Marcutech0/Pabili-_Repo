@@ -25,7 +25,6 @@ public class CustomerDropZone : MonoBehaviour, ProductDropZone
         if (enableDebugLogs) Debug.LogError(message);
     }
 
-
     public void OnProductDrop(ProductControls product)
     {
         if (customer == null || product == null || product.productData == null)
@@ -36,11 +35,22 @@ public class CustomerDropZone : MonoBehaviour, ProductDropZone
 
         if (customer.desiredProducts.Contains(product.productData))
         {
-            Log("Customer accepted item. Waiting for correct change...");
+            // Update the product stock
+            product.productData.ModifyStock(-1); // This will trigger the OnStockChanged event
 
-            if (CashierUI.Instance != null)
+            Log("Customer accepted item. Product stock reduced.");
+
+            if (Mathf.Approximately(customer.moneyGiven, product.productData.productPrice))
             {
-                // Only pass the values, don't add money yet
+                // Exact change case
+                CurrencyManager.Instance.AddFunds(customer.moneyGiven);
+                customer.isServed = true;
+                Destroy(product.gameObject);
+                CashierUI.Instance.CloseUI(); // Call through the Instance
+            }
+            else
+            {
+                // Needs change case - don't close UI here
                 CashierUI.Instance.OpenUI(
                     customer.moneyGiven,
                     product.productData.productPrice
@@ -48,10 +58,6 @@ public class CustomerDropZone : MonoBehaviour, ProductDropZone
                 CashierUI.Instance.currentCustomer = customer;
                 CashierUI.Instance.currentProductGO = product.gameObject;
             }
-        }
-        else
-        {
-            product.ResetToStartPosition();
         }
     }
 }

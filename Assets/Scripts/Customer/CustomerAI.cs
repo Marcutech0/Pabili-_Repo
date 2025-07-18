@@ -5,7 +5,7 @@ public class CustomerAI : MonoBehaviour
 {
     //Customer Variables
     public ProductData[] desiredProducts;
-    public float moneyGiven;
+    public int moneyGiven;
     public bool isServed;
 
     public void RequestProduct(ProductData product)

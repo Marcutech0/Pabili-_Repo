@@ -1,63 +1,88 @@
 ﻿using UnityEngine;
-using System.Linq; 
+using System.Linq;
 
 public class CustomerDropZone : MonoBehaviour, ProductDropZone
 {
     [Header("Debug")]
-    public bool enableDebugLogs = true; // Toggle in Inspector
+    public bool enableDebugLogs = true;
 
-    [Header("Customer who is waiting for the item")]
+    [Header("Customer Reference")]
     public CustomerAI customer;
 
-    // Allows debug logs for non-game breaking errors
-    private void Log(string message)
-    {
-        if (enableDebugLogs) Debug.Log(message);
-    }
-
-    private void LogWarning(string message)
-    {
-        if (enableDebugLogs) Debug.LogWarning(message);
-    }
-
-    private void LogError(string message)
-    {
-        if (enableDebugLogs) Debug.LogError(message);
-    }
+    private void Log(string message) => Debug.Log(message);
+    private void LogWarning(string message) => Debug.LogWarning(message);
+    private void LogError(string message) => Debug.LogError(message);
 
     public void OnProductDrop(ProductControls product)
     {
-        if (customer == null || product == null || product.productData == null)
+        // Basic null checks
+        if (customer == null)
         {
-            LogWarning("Missing customer or product data.");
+            LogWarning("No customer assigned to drop zone!");
+            product?.ResetToStartPosition();
             return;
         }
 
-        if (customer.desiredProducts.Contains(product.productData))
+        if (product == null || product.productData == null)
         {
-            // Update the product stock
-            product.productData.ModifyStock(-1); // This will trigger the OnStockChanged event
+            LogWarning("Invalid product dropped!");
+            return;
+        }
 
-            Log("Customer accepted item. Product stock reduced.");
+        // Check if customer wants this product
+        if (!customer.ReceiveProduct(product.productData))
+        {
+            LogWarning($"Customer doesn't want {product.productData.productName}!");
+            product.ResetToStartPosition();
+            return;
+        }
 
-            if (Mathf.Approximately(customer.moneyGiven, product.productData.productPrice))
+        // Process valid product
+        ProcessProductDrop(product);
+    }
+
+    private void ProcessProductDrop(ProductControls product)
+    {
+        // Reduce product stock
+        product.productData.ModifyStock(-1);
+        Log($"Accepted {product.productData.productName}");
+
+        // Calculate transaction
+        int changeNeeded = customer.moneyGiven - product.productData.productPrice;
+
+        if (changeNeeded == 0)
+        {
+            // Exact payment
+            CompleteTransaction(customer, product.gameObject);
+        }
+        else if (changeNeeded > 0)
+        {
+            // Needs change
+            if (CashierUI.Instance != null)
             {
-                // Exact change case
-                CurrencyManager.Instance.AddFunds(customer.moneyGiven);
-                customer.isServed = true;
-                Destroy(product.gameObject);
-                CashierUI.Instance.CloseUI(); // Call through the Instance
-            }
-            else
-            {
-                // Needs change case - don't close UI here
-                CashierUI.Instance.OpenUI(
-                    customer.moneyGiven,
-                    product.productData.productPrice
-                );
+                CashierUI.Instance.OpenUI(customer.moneyGiven, product.productData.productPrice);
                 CashierUI.Instance.currentCustomer = customer;
                 CashierUI.Instance.currentProductGO = product.gameObject;
             }
+            else
+            {
+                LogError("CashierUI missing! Completing transaction anyway.");
+                CompleteTransaction(customer, product.gameObject);
+            }
         }
+        else
+        {
+            // Underpaid
+            LogWarning($"Customer underpaid by {-changeNeeded}!");
+            product.ResetToStartPosition();
+        }
+    }
+
+    private void CompleteTransaction(CustomerAI customer, GameObject productObj)
+    {
+        CurrencyManager.Instance.AddFunds(customer.moneyGiven);
+        customer.isServed = true;
+        Destroy(productObj);
+        Log("Transaction completed successfully");
     }
 }

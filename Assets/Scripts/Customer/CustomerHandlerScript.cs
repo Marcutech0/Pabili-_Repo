@@ -12,27 +12,22 @@ public class TestCustomerTrigger : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.R))
         {
-            // Validate the product list
-            if (products == null || products.Length == 0)
+            if (customer == null)
             {
-                Debug.LogError("❌ No products assigned to the product list.");
+                Debug.LogWarning("⚠️ No customer assigned!");
                 return;
             }
 
-            // Select a random product
+            if (products == null || products.Length == 0)
+            {
+                Debug.LogError("❌ No products available!");
+                return;
+            }
+
+            // Add this missing logic:
             ProductData selectedProduct = products[Random.Range(0, products.Length)];
-
-            if (customer != null)
-            {
-                customer.RequestProduct(selectedProduct);
-
-                // 🧾 Console feedback
-                Debug.Log($"📦 Sent request: Customer now wants \"{selectedProduct.productName}\" and paid ₱{customer.moneyGiven:F2}");
-            }
-            else
-            {
-                Debug.LogWarning("⚠️ No customer GameObject assigned in the Inspector.");
-            }
+            customer.RequestProduct(selectedProduct);
+            Debug.Log($"📦 Customer requested: {selectedProduct.productName}");
         }
     }
 }

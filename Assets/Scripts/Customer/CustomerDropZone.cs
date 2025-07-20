@@ -19,7 +19,10 @@ public class CustomerDropZone : MonoBehaviour, ProductDropZone
         if (customer == null)
         {
             LogWarning("No customer assigned to drop zone!");
-            product?.ResetToStartPosition();
+            if (product != null)
+            {
+                product.ReturnToOriginalPosition();
+            }
             return;
         }
 
@@ -29,60 +32,20 @@ public class CustomerDropZone : MonoBehaviour, ProductDropZone
             return;
         }
 
-        // Check if customer wants this product
-        if (!customer.ReceiveProduct(product.productData))
+        // Process valid product drop
+        if (customer.ReceiveProduct(product.productData))
         {
-            LogWarning($"Customer doesn't want {product.productData.productName}!");
-            product.ResetToStartPosition();
-            return;
-        }
-
-        // Process valid product
-        ProcessProductDrop(product);
-    }
-
-    private void ProcessProductDrop(ProductControls product)
-    {
-        // Reduce product stock
-        product.productData.ModifyStock(-1);
-        Log($"Accepted {product.productData.productName}");
-
-        // Calculate transaction
-        int changeNeeded = customer.moneyGiven - product.productData.productPrice;
-
-        if (changeNeeded == 0)
-        {
-            // Exact payment
-            CompleteTransaction(customer, product.gameObject);
-        }
-        else if (changeNeeded > 0)
-        {
-            // Needs change
-            if (CashierUI.Instance != null)
-            {
-                CashierUI.Instance.OpenUI(customer.moneyGiven, product.productData.productPrice);
-                CashierUI.Instance.currentCustomer = customer;
-                CashierUI.Instance.currentProductGO = product.gameObject;
-            }
-            else
-            {
-                LogError("CashierUI missing! Completing transaction anyway.");
-                CompleteTransaction(customer, product.gameObject);
-            }
+            // Successful transaction - open cashier UI
+            int productPrice = product.productData.productPrice;
+            CashierUI.Instance.OpenUI(customer.moneyGiven, productPrice);
+            CashierUI.Instance.currentCustomer = customer;
+            CashierUI.Instance.currentProductGO = product.gameObject;
         }
         else
         {
-            // Underpaid
-            LogWarning($"Customer underpaid by {-changeNeeded}!");
-            product.ResetToStartPosition();
+            // Wrong product - return to shelf
+            product.ReturnToOriginalPosition();
+            LogWarning("Customer didn't want this product!");
         }
-    }
-
-    private void CompleteTransaction(CustomerAI customer, GameObject productObj)
-    {
-        CurrencyManager.Instance.AddFunds(customer.moneyGiven);
-        customer.isServed = true;
-        Destroy(productObj);
-        Log("Transaction completed successfully");
     }
 }

@@ -7,138 +7,110 @@ public class RestockManager : MonoBehaviour
     public ProductLoader productLoader;
     public Transform shelfParent;
 
-    [Header("Settings")]
-    public float verticalOffset = 0.2f;
-    public int maxProductsPerShelf = 5;
-
     private Dictionary<ProductData, Transform> productToShelfMap = new();
+    private Dictionary<ProductData, ProductControls> shelfProducts = new();
 
     void Start()
     {
-        // Reset all product counts before initializing
         InitializeShelves();
-    }
-
-    void OnApplicationQuit()
-    {
-        ResetAllProducts();
     }
 
     void InitializeShelves()
     {
         productToShelfMap.Clear();
+        shelfProducts.Clear();
 
-        if (shelfParent.childCount < productLoader.productPrefabs.Count)
+        if (shelfParent.childCount >= productLoader.productPrefabs.Count)
         {
-            Debug.LogError("Not enough shelves for all products!");
-            return;
-        }
-
-        for (int i = 0; i < productLoader.productPrefabs.Count; i++)
-        {
-            var productData = productLoader.productPrefabs[i].GetComponent<ProductControls>().productData;
-            productToShelfMap[productData] = shelfParent.GetChild(i);
-            InitializeShelfStock(productData, shelfParent.GetChild(i));
-        }
-    }
-
-    public void InitializeShelfStock(ProductData productData, Transform shelf)
-    {
-        // Clear existing children
-        foreach (Transform child in shelf)
-        {
-            Destroy(child.gameObject);
-        }
-        productData.spawnedCount = 0; // Reset spawned count
-
-        // Spawn products up to current stock or max shelf capacity
-        int canSpawn = Mathf.Min(
-            productData.productStock,
-            productData.productMaxStack,
-            maxProductsPerShelf
-        );
-
-        for (int i = 0; i < canSpawn; i++)
-        {
-            Vector3 spawnPos = CalculateSpawnPosition(shelf, i);
-            Instantiate(GetPrefabForProduct(productData), spawnPos, Quaternion.identity, shelf);
-            productData.spawnedCount++;
-        }
-    }
-
-    Vector3 CalculateSpawnPosition(Transform shelf, int itemIndex)
-    {
-        return shelf.position + new Vector3(0, itemIndex * verticalOffset, 0);
-    }
-
-    GameObject GetPrefabForProduct(ProductData productData)
-    {
-        foreach (var prefab in productLoader.productPrefabs)
-        {
-            if (prefab.GetComponent<ProductControls>().productData == productData)
+            for (int i = 0; i < productLoader.productPrefabs.Count; i++)
             {
-                return prefab;
+                var prefab = productLoader.productPrefabs[i];
+                var productData = prefab.GetComponent<ProductControls>().productData;
+                Transform shelf = shelfParent.GetChild(i);
+
+                productToShelfMap[productData] = shelf;
+
+                // Initialize with existing stock
+                if (productData.productStock > 0)
+                {
+                    SpawnProductOnShelf(productData, shelf);
+                }
             }
         }
-        return null;
-    }
-
-    public bool CanRestock(ProductData productData)
-    {
-        return productData.productStock < productData.productMaxStack;
+        else
+        {
+            Debug.LogError($"Not enough shelves! Need {productLoader.productPrefabs.Count}, has {shelfParent.childCount}");
+        }
     }
 
     public void RestockProduct(ProductData productData)
     {
-        // Check if we can restock first
-        if (!CanRestock(productData))
+        if (productData == null) return;
+
+        if (productData.productStock >= productData.productMaxStack)
         {
-            Debug.Log($"Cannot restock {productData.productName} - already at max capacity");
+            Debug.Log($"{productData.productName} already at max stock!");
             return;
         }
 
         if (!CurrencyManager.Instance.SpendFunds(productData.restockPrice))
             return;
 
-        // Calculate how many we can add without exceeding max
+        // Calculate how much we can add
         int canAdd = Mathf.Min(
             productData.productRestockAmount,
             productData.productMaxStack - productData.productStock
         );
 
-        // Update the stock count
-        productData.productStock += canAdd;
+        // Apply stock change
+        productData.ModifyStock(canAdd);
 
-        // Only spawn up to shelf capacity
-        if (productToShelfMap.TryGetValue(productData, out Transform shelfSlot))
+        // Handle physical product
+        if (productToShelfMap.TryGetValue(productData, out Transform shelf))
         {
-            int currentShelfCount = shelfSlot.childCount;
-            int canSpawn = Mathf.Min(canAdd, maxProductsPerShelf - currentShelfCount);
-
-            for (int i = 0; i < canSpawn; i++)
+            if (!shelfProducts.ContainsKey(productData) || shelfProducts[productData] == null)
             {
-                Vector3 spawnPos = CalculateSpawnPosition(shelfSlot, currentShelfCount + i);
-                Instantiate(GetPrefabForProduct(productData), spawnPos, Quaternion.identity, shelfSlot);
-                productData.spawnedCount++;
+                SpawnProductOnShelf(productData, shelf);
             }
         }
     }
 
-    public void ResetAllProducts()
+    void SpawnProductOnShelf(ProductData productData, Transform shelf)
+    {
+        // Find the correct prefab
+        GameObject prefab = GetPrefabForProduct(productData);
+        if (prefab == null)
+        {
+            Debug.LogError($"No prefab found for {productData.productName}");
+            return;
+        }
+
+        // Create instance
+        GameObject productObj = Instantiate(prefab, shelf.position, Quaternion.identity, shelf);
+        ProductControls productControls = productObj.GetComponent<ProductControls>();
+
+        if (productControls != null)
+        {
+            productControls.productData = productData;
+            shelfProducts[productData] = productControls;
+
+            // Initialize display to show current stock
+            productControls.GetComponent<ProductDisplay>()?.UpdateStack(productData.productStock);
+
+            Debug.Log($"Spawned {productData.productName} on shelf (Stock: {productData.productStock})");
+        }
+    }
+
+    GameObject GetPrefabForProduct(ProductData productData)
     {
         foreach (var prefab in productLoader.productPrefabs)
         {
-            var productData = prefab.GetComponent<ProductControls>().productData;
-            productData.FullReset();
-
-            // Clear shelf visuals
-            if (productToShelfMap.TryGetValue(productData, out Transform shelf))
+            var controls = prefab.GetComponent<ProductControls>();
+            if (controls != null && controls.productData == productData)
             {
-                foreach (Transform child in shelf)
-                {
-                    Destroy(child.gameObject);
-                }
+                return prefab;
             }
         }
+        return null;
     }
 }

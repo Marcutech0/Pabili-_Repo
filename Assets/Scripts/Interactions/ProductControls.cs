@@ -4,30 +4,28 @@ public class ProductControls : MonoBehaviour
 {
     [Header("Required References")]
     public ProductData productData;
-    private Collider2D _coll;
-    private Vector3 _startDragPos;
-    private Vector3 _previousDragPos;
+    public Collider2D productCollider;
+    private Vector3 _originalPosition;
     private bool _isDragging = false;
 
     [Header("Drag Settings")]
-    public float rotationLerpSpeed = 1f;
     public float swayAmplitude = 3f;
     public float swayFrequency = 3f;
+    [Range(0.1f, 2f)] public float rotationLerpSpeed = 1f;
 
-    private float swayTimer = 0f;
-    private float targetAngle = 0f;
+    private float _swayTimer;
+    private float _targetAngle;
     private ProductDisplay _display;
 
     void Start()
     {
-        _coll = GetComponent<Collider2D>();
-        _startDragPos = transform.position;
+        if (productCollider == null) productCollider = GetComponent<Collider2D>();
+        _originalPosition = transform.position;
         _display = GetComponent<ProductDisplay>();
 
         if (productData != null)
         {
             productData.OnStockChanged += UpdateDisplay;
-            // Initialize with current stock count
             UpdateDisplay();
         }
     }
@@ -37,130 +35,98 @@ public class ProductControls : MonoBehaviour
         if (productData != null)
         {
             productData.OnStockChanged -= UpdateDisplay;
-            productData.spawnedCount--;
         }
     }
 
     void Update()
     {
-        HandleDragInput();
-    }
-
-    void HandleDragInput()
-    {
-        if (Input.GetMouseButtonDown(0))
-        {
-            TryStartDrag();
-        }
-
         if (_isDragging)
         {
-            if (Input.GetMouseButton(0))
-            {
-                ContinueDrag();
-            }
-            else if (Input.GetMouseButtonUp(0))
-            {
-                EndDrag();
-            }
+            UpdateDragPosition();
+            UpdateDragRotation();
         }
     }
 
-    void TryStartDrag()
+    void OnMouseDown()
     {
         if (productData == null || productData.productStock <= 0) return;
 
-        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Collider2D hit = Physics2D.OverlapPoint(mousePos);
-
-        if (hit != null && hit == _coll)
-        {
-            _isDragging = true;
-            _startDragPos = transform.position;
-            _previousDragPos = GetMousePositionInWorldSpace();
-            swayTimer = 0f;
-            transform.SetParent(null);
-            _display?.UpdateStack(1);
-        }
+        _isDragging = true;
+        _swayTimer = 0f;
+        transform.SetParent(null);
+        productCollider.enabled = false;
     }
 
-    void ContinueDrag()
+    void OnMouseUp()
     {
-        Vector3 currentMousePos = GetMousePositionInWorldSpace();
-        transform.position = currentMousePos;
-
-        Vector3 dragDirection = currentMousePos - _previousDragPos;
-        if (dragDirection.sqrMagnitude > 0.001f)
-        {
-            targetAngle = Mathf.Atan2(dragDirection.y, dragDirection.x) * Mathf.Rad2Deg;
-        }
-
-        swayTimer += Time.deltaTime * swayFrequency;
-        float swayOffset = Mathf.Sin(swayTimer) * swayAmplitude;
-        float finalAngle = targetAngle + swayOffset;
-
-        float currentZ = transform.eulerAngles.z;
-        float smoothedZ = Mathf.LerpAngle(currentZ, finalAngle, Time.deltaTime * rotationLerpSpeed);
-        transform.rotation = Quaternion.Euler(0f, 0f, smoothedZ);
-
-        _previousDragPos = currentMousePos;
-    }
-
-    void EndDrag()
-    {
+        if (!_isDragging) return;
         _isDragging = false;
-        _coll.enabled = false;
+        productCollider.enabled = true;
 
-        Collider2D hit = Physics2D.OverlapCircle(transform.position, 0.2f);
-        _coll.enabled = true;
-
-        if (hit != null)
-        {
-            HandleDropZoneInteraction(hit);
-        }
-        else
-        {
-            ReturnToOriginalPosition();
-        }
+        HandleDrop();
     }
 
-    void HandleDropZoneInteraction(Collider2D hit)
+    private void UpdateDragPosition()
     {
-        if (hit.GetComponent<ProductDropZone>() is ProductDropZone dropZone)
+        Vector3 mousePos = GetMouseWorldPosition();
+        transform.position = mousePos;
+    }
+
+    private void UpdateDragRotation()
+    {
+        Vector3 mousePos = GetMouseWorldPosition();
+        Vector3 moveDirection = mousePos - _originalPosition;
+
+        if (moveDirection.sqrMagnitude > 0.01f)
         {
-            if (dropZone is CustomerDropZone)
+            _targetAngle = Mathf.Atan2(moveDirection.y, moveDirection.x) * Mathf.Rad2Deg;
+        }
+
+        _swayTimer += Time.deltaTime * swayFrequency;
+        float swayOffset = Mathf.Sin(_swayTimer) * swayAmplitude;
+        float currentAngle = Mathf.LerpAngle(transform.eulerAngles.z, _targetAngle + swayOffset, Time.deltaTime * rotationLerpSpeed);
+
+        transform.rotation = Quaternion.Euler(0, 0, currentAngle);
+    }
+
+    private void HandleDrop()
+    {
+        Collider2D dropZone = Physics2D.OverlapCircle(transform.position, 0.5f);
+
+        if (dropZone != null && dropZone.TryGetComponent<ProductDropZone>(out var zone))
+        {
+            zone.OnProductDrop(this);
+
+            if (zone is CustomerDropZone)
             {
                 productData.ModifyStock(-1);
             }
-            dropZone.OnProductDrop(this);
-            UpdateDisplay();
         }
         else
         {
-            ReturnToOriginalPosition();
+            ReturnToShelf();
         }
     }
 
-    public void ReturnToOriginalPosition()
+    public void ReturnToShelf()
     {
-        transform.SetPositionAndRotation(_startDragPos, Quaternion.identity);
+        transform.position = _originalPosition;
+        transform.rotation = Quaternion.identity;
         UpdateDisplay();
     }
 
-    public Vector3 GetStartPosition()
+    private void UpdateDisplay()
     {
-        return _startDragPos;
+        if (_display != null)
+        {
+            _display.UpdateStack(productData.productStock);
+        }
     }
 
-    void UpdateDisplay()
+    private Vector3 GetMouseWorldPosition()
     {
-        _display?.UpdateStack(productData.productStock);
-    }
-
-    Vector3 GetMousePositionInWorldSpace()
-    {
-        Vector3 p = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        p.z = 0f;
-        return p;
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mousePos.z = 0;
+        return mousePos;
     }
 }

@@ -23,6 +23,7 @@ public class CashierUI : MonoBehaviour
     private string currentInput = "";
     private int customerPaid;
     private bool transactionSubmitted = false;
+    private ProductControls currentProductControls;
 
     void Awake()
     {
@@ -40,10 +41,16 @@ public class CashierUI : MonoBehaviour
 
     public void OpenUI(int moneyGiven, int productPrice)
     {
+        if (panel == null)
+        {
+            LogError("CashierUI panel reference is missing!");
+            return;
+        }
+
         int change = moneyGiven - productPrice;
         if (change <= 0)
         {
-            Debug.LogError("CashierUI opened with invalid change amount!");
+            LogError("CashierUI opened with invalid change amount!");
             CloseUI();
             return;
         }
@@ -78,7 +85,7 @@ public class CashierUI : MonoBehaviour
 
     public void SubmitChange()
     {
-        if (transactionSubmitted) return;
+        if (transactionSubmitted || currentCustomer == null) return;
 
         if (!int.TryParse(currentInput, out int enteredAmount))
         {
@@ -102,13 +109,39 @@ public class CashierUI : MonoBehaviour
         CurrencyManager.Instance.AddFunds(customerPaid);
 
         if (currentCustomer != null)
+        {
             currentCustomer.isServed = true;
+            Log($"Successfully served customer. Received ₱{customerPaid}");
+        }
 
         if (currentProductGO != null)
-            Destroy(currentProductGO);
+        {
+            // Get product controls before destroying
+            currentProductControls = currentProductGO.GetComponent<ProductControls>();
+
+            // Return to pool or destroy with delay
+            StartCoroutine(CompleteProductTransaction());
+        }
 
         inputDisplayText.text = $"<color=green>✅ Correct! {CurrencyManager.Instance.currencySymbol}{amount}</color>";
         StartCoroutine(CloseAfterDelay(successDisplayDuration));
+    }
+
+    private IEnumerator CompleteProductTransaction()
+    {
+        yield return new WaitForSecondsRealtime(0.5f); // Small delay for visual feedback
+
+        if (currentProductControls != null)
+        {
+            // Update shelf display if product came from shelf
+            ProductDisplay shelfDisplay = currentProductControls.GetComponent<ProductDisplay>();
+            if (shelfDisplay != null)
+            {
+                shelfDisplay.UpdateStack(currentProductControls.productData.productStock);
+            }
+        }
+
+        Destroy(currentProductGO);
     }
 
     private IEnumerator CloseAfterDelay(float delay)
@@ -154,13 +187,18 @@ public class CashierUI : MonoBehaviour
     public void CloseUI()
     {
         Time.timeScale = 1f;
-        panel.SetActive(false);
+        if (panel != null) panel.SetActive(false);
+
+        // Clean up references
         currentCustomer = null;
         currentProductGO = null;
+        currentProductControls = null;
+
         ClearInput();
         transactionSubmitted = false;
     }
 
-    private void Log(string message) { if (enableDebugLogs) Debug.Log(message); }
-    private void LogWarning(string message) { if (enableDebugLogs) Debug.LogWarning(message); }
+    private void Log(string message) { if (enableDebugLogs) Debug.Log($"[CashierUI] {message}"); }
+    private void LogWarning(string message) { if (enableDebugLogs) Debug.LogWarning($"[CashierUI] {message}"); }
+    private void LogError(string message) { if (enableDebugLogs) Debug.LogError($"[CashierUI] {message}"); }
 }

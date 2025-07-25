@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e3ed60fc56be5e4b9b3406352c85c82, type: 3}
+  m_Name: TotoDialogue
+  m_EditorClassIdentifier: 
+  greetings:
+  - "\u201CYo, Kuya! Astig ng tindahan ah"
+  - Huy, pahinga muna ako dito sa tindahan mo ha?
+  - Oyy, andito na si pogi!
+  - Pabili ho! May sukli kayo sa piso?
+  thankYous:
+  - Yehey, salamat po!
+  - Ayos! 'Salamat, kuya!
+  - Nice one, bossing!
+  - Lagi kang the best!
+  wrongProductLines:
+  - Ay, hindi po ito yung gusto ko
+  - Hala, mali yata, hindi ito yun eh.
+  - Kuya, wrong send ka ng item!
+  - "Hindi \u2018to, oh. Yung isa dapat!"
+  idleLines:
+  - "(sucking on lollipop) Hmm\u2026 ilang beses na akong naglaro, di pa rin ako
+    MVP."
+  - Pag ako nanalo bukas, libre ko kayo.
+  - Nagka-load na kaya si crush?
+  - Mainit sa labas grabe. Buti dito presko.

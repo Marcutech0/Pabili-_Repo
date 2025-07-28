@@ -22,7 +22,7 @@ public class TimeManager : MonoBehaviour
         Sunday
     }
 
-    private float minuteToRealTime = 0.1f;
+    private float minuteToRealTime = 0.8f;
     public float timer;
 
     void Start()

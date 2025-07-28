@@ -1,17 +1,14 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
-using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class DayChangeIcon : MonoBehaviour
 {
-    public Image timeOfDayIcon; 
-    public TMP_Sprite morningIcon;
-    public TMP_Sprite afternoonIcon;
-    public TMP_Sprite eveningIcon;
+    public Image timeOfDayIcon;
+    public Sprite morningIcon;
+    public Sprite afternoonIcon;
+    public Sprite eveningIcon;
 
     private void OnEnable()
     {
@@ -25,11 +22,24 @@ public class DayChangeIcon : MonoBehaviour
 
     private void Start()
     {
-        UpdateTimeOfDayIcon(); 
+        UpdateTimeOfDayIcon();
     }
 
     private void UpdateTimeOfDayIcon()
     {
-        
+        int hour = TimeManager.Hour;
+
+        if (hour >= 6 && hour < 12)
+        {
+            timeOfDayIcon.sprite = morningIcon;
+        }
+        else if (hour >= 12 && hour < 18)
+        {
+            timeOfDayIcon.sprite = afternoonIcon;
+        }
+        else
+        {
+            timeOfDayIcon.sprite = eveningIcon;
+        }
     }
 }

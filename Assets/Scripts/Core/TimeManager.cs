@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class TimeManager : MonoBehaviour
@@ -11,18 +9,17 @@ public class TimeManager : MonoBehaviour
 
     public static int Minute { get; private set; }
     public static int Hour { get; private set; }
-    //public static bool IsAM { get; private set; } = true;
     public static Days CurrentDay { get; private set; }
 
     public enum Days
     {
-        Mon,
-        Tue,
-        Wed,
-        Thu,
-        Fri,
-        Sat,
-        Sun
+        Monday,
+        Tuesday,
+        Wednesday,
+        Thursday,
+        Friday,
+        Saturday,
+        Sunday
     }
 
     private float minuteToRealTime = 0.8f;
@@ -32,7 +29,7 @@ public class TimeManager : MonoBehaviour
     {
         Minute = 0;
         Hour = 8;
-        CurrentDay = Days.Mon;
+        CurrentDay = Days.Monday;
         timer = minuteToRealTime;
     }
 
@@ -49,6 +46,7 @@ public class TimeManager : MonoBehaviour
             {
                 Minute = 0;
                 Hour++;
+
                 if (Hour >= 24)
                 {
                     Hour = 0;
@@ -64,25 +62,32 @@ public class TimeManager : MonoBehaviour
             timer = minuteToRealTime;
         }
     }
-    
+
     private void AdvanceDay()
     {
         CurrentDay = (Days)(((int)CurrentDay + 1) % 7);
         DayChanged?.Invoke(CurrentDay);
     }
 
+    public static string GetDayName(Days day)
+    {
+        return day.ToString(); // returns full name like "Monday"
+    }
+
     public bool IsMorning()
     {
         return Hour >= 8 && Hour <= 12;
     }
+
     public bool IsAfternoon()
     {
         return Hour > 12 && Hour < 18;
     }
+
     public bool IsEvening()
     {
         return Hour > 18 || Hour < 8;
-    }     
+    }
 }
 
 /**[System.Serializable]

@@ -22,7 +22,7 @@ public class TimeManager : MonoBehaviour
         Sunday
     }
 
-    private float minuteToRealTime = 0.8f;
+    private float minuteToRealTime = 0.1f;
     public float timer;
 
     void Start()
@@ -53,8 +53,8 @@ public class TimeManager : MonoBehaviour
                     AdvanceDay();
                 }
 
-                Hour = Hour % 12;
-                if (Hour == 0) Hour = 12;
+                //Hour = Hour % 12;
+                //if (Hour == 0) Hour = 12;
 
                 OneHourChanged?.Invoke();
             }

@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e3ed60fc56be5e4b9b3406352c85c82, type: 3}
+  m_Name: MelyDialogue
+  m_EditorClassIdentifier: 
+  greetings:
+  - Hello iho, andito na si Tita.
+  - O, may bago ba sa tindahan natin?
+  - Magandang araw, anak.
+  - Kamusta, nak.
+  thankYous:
+  - Salamat ha, mabait ka talaga.
+  - Ay, thank you anak, ha?
+  - "Aba\u2019y ang sipag mo talaga. Salamat!"
+  - Ay naku, bless ka talaga.
+  wrongProductLines:
+  - "Ay, hindi ito \u2018yung sinasabi ko eh."
+  - Anak, mali ata ito. Yung dati sana.
+  - Hmm, parang iba ito sa kinuha ko nung isang araw.
+  - "\u201CNaku, hindi ito bagay sa recipe ko."
+  idleLines:
+  - Tagal ni Jun-Jun no? Lagi nalang late yun.
+  - Naku, mahal na ng bilihin ngayon, grabe.
+  - Buti pa dito may presyong ka-barangay
+  - Iniipon ko sticker sa kape, baka manalo ng kaldero!

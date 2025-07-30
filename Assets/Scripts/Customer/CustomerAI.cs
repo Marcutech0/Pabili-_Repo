@@ -15,14 +15,11 @@ public class CustomerAI : MonoBehaviour
     public int moneyGiven;
     public bool isServed;
 
-    public TextMeshProUGUI requestTextUI = null;
+    public TextMeshProUGUI requestTextUI;
 
     private void Start()
     {
-        if (dialogue != null && dialogueManager != null)
-        {
-            ShowGreeting();
-        }
+         ShowGreeting();
     }
 
     public void RequestProduct(ProductData product)
@@ -43,8 +40,7 @@ public class CustomerAI : MonoBehaviour
         string productName = product.productName;
         string line = $"Pabili nga ng {productName}!";
 
-        if (requestTextUI != null)
-            requestTextUI.text = line;
+        requestTextUI.text = line;
 
         Debug.Log($"🧍 Customer wants: {productName} | Paid: ₱{moneyGiven:F2}");
     }

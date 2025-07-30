@@ -12,7 +12,7 @@ public class DialogueManager : MonoBehaviour
 
     void Start()
     {
-        dialoguePanel.SetActive(false);
+        //dialoguePanel.SetActive(false);
     }
 
     public void ShowDialogue(string line)

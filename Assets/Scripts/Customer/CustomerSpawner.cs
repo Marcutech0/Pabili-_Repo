@@ -3,23 +3,22 @@ using System.Collections;
 
 public class CustomerSpawner : MonoBehaviour
 {
-    [Header("References")]
-    public GameObject customerPrefab;
+    [Header("Customer Prefabs")]
+    public GameObject[] customerPrefabs;
+
+    [Header("Other")]
     public Transform spawnPoint;
     public ProductData[] availableProducts;
 
     private CustomerAI currentCustomer;
 
-    void Start()
-    {
-        SpawnCustomer();
-    }
-
     public void SpawnCustomer()
     {
         if (currentCustomer != null) return;
 
-        GameObject newCustomer = Instantiate(customerPrefab, spawnPoint.position, Quaternion.identity);
+        GameObject prefabToSpawn = customerPrefabs[Random.Range(0, customerPrefabs.Length)];
+
+        GameObject newCustomer = Instantiate(prefabToSpawn, spawnPoint.position, Quaternion.identity);
         currentCustomer = newCustomer.GetComponent<CustomerAI>();
 
         if (currentCustomer != null && availableProducts.Length > 0)
@@ -43,4 +42,9 @@ public class CustomerSpawner : MonoBehaviour
         yield return new WaitForSeconds(1f); // Delay before next customer
         SpawnCustomer();
     }
+
+    public void SpawnCustomerButtnon()
+    {
+        SpawnCustomer();
+    }   
 }

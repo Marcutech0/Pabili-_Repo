@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e3ed60fc56be5e4b9b3406352c85c82, type: 3}
+  m_Name: JunJunDialogue
+  m_EditorClassIdentifier: 
+  greetings:
+  - Yo! Kiko! May panalo ba diyan?
+  - Bro! Pabili.
+  - Uy, bagong stock? Pa-isa nga.
+  - Tara bilis, may ML pa ako mamaya!
+  thankYous:
+  - "Solid! Ayos \u2018to, pre."
+  - Astig, salamat.
+  - Nice one, bossing!
+  - Ayos ka talaga, Kiko.
+  wrongProductLines:
+  - "Eh? Bro, di \u2018yan ang sinabi ko ah."
+  - Hala, wrong item ka yata.
+  - "Pre... malabo \u2018to."
+  - Baka puyat ka bro, mali ata.
+  idleLines:
+  - Sana all may tindang ice candy.
+  - Si Ate nag-TikTok nanaman sa labas.
+  - Kung may load ka jan, pahingi naman.
+  - Tambay mode muna ako dito, hehe.

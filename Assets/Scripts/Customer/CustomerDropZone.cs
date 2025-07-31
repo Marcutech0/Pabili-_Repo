@@ -8,6 +8,7 @@ public class CustomerDropZone : MonoBehaviour, ProductDropZone
 
     [Header("Customer Reference")]
     public CustomerAI customer;
+    //public Transform targetParent;
 
     private void Log(string message) => Debug.Log(message);
     private void LogWarning(string message) => Debug.LogWarning(message);
@@ -22,6 +23,7 @@ public class CustomerDropZone : MonoBehaviour, ProductDropZone
             if (product != null)
             {
                 product.ReturnToOriginalPosition();
+                //product.transform.SetParent(targetParent);
             }
             return;
         }

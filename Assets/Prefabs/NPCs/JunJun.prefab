@@ -510,7 +510,7 @@ GameObject:
   - component: {fileID: 7108538263265741299}
   - component: {fileID: 8874816774138751327}
   m_Layer: 0
-  m_Name: Toto
+  m_Name: JunJun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -567,7 +567,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12a39b0ffc6dde647aa59bc82894a688, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dialogue: {fileID: 11400000, guid: ebe291e8b49004a4cbbe853d4c8dda92, type: 2}
+  dialogue: {fileID: 11400000, guid: 9e65b096b04bc1f4487ebad0645e059a, type: 2}
   dialogueManager: {fileID: 1085844167861482719}
   maxExtraPayment: 5
   desiredProducts: []
@@ -588,7 +588,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2552506237586506376, guid: 711dcfeca1f80ad45a19c8cbccf97671, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.97
       objectReference: {fileID: 0}
     - target: {fileID: 2552506237586506376, guid: 711dcfeca1f80ad45a19c8cbccf97671, type: 3}
       propertyPath: m_LocalPosition.z
@@ -640,8 +640,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5576688163605212950, guid: 711dcfeca1f80ad45a19c8cbccf97671, type: 3}
       propertyPath: m_Name
-      value: CustomerToto
+      value: CustomerJunJun
       objectReference: {fileID: 0}
+    - target: {fileID: 6077804802881211910, guid: 711dcfeca1f80ad45a19c8cbccf97671, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -1461871007143728590, guid: ab758a9183328184d97f518459cf0381, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 1533711524267223196, guid: 711dcfeca1f80ad45a19c8cbccf97671, type: 3}

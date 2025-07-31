@@ -5,6 +5,7 @@ public class CustomerSpawner : MonoBehaviour
 {
     [Header("Customer Prefabs")]
     public GameObject[] customerPrefabs;
+    public GameObject totoPrefab;
 
     [Header("Other")]
     public Transform spawnPoint;
@@ -12,6 +13,12 @@ public class CustomerSpawner : MonoBehaviour
 
     private CustomerAI currentCustomer;
     public CustomerDropZone customerDropZone;
+
+    void Start()
+    {
+        SpawnCustomer();
+        //Debug.Log("CustomerSpawner awake called");
+    }
 
     public void SpawnCustomer()
     {
@@ -48,5 +55,5 @@ public class CustomerSpawner : MonoBehaviour
     public void SpawnCustomerButtnon()
     {
         SpawnCustomer();
-    }   
+    }
 }

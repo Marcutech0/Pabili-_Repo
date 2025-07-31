@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 6727492081836752884}
   - component: {fileID: 8406429998832718322}
   m_Layer: 5
-  m_Name: Candy_Product
+  m_Name: Tomato_Product 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -105,7 +105,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.51, y: 1.05}
+    oldSize: {x: 0.97, y: 0.92}
     newSize: {x: 1.06, y: 1.33}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -140,7 +140,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dd038a870118464da21e86f03695a72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  productData: {fileID: 11400000, guid: e359b9d1410c4584d88945800196c5d9, type: 2}
+  productData: {fileID: 11400000, guid: a8a05bedbc6c38541a7fcfcd609e1f79, type: 2}
   rotationLerpSpeed: 1
   swayAmplitude: 3
   swayFrequency: 3
@@ -188,7 +188,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 99
-  m_Sprite: {fileID: 667403689130819850, guid: 3fec8901b136c9148931e60874c2745d, type: 3}
+  m_Sprite: {fileID: -1981442878252915710, guid: 5a82d2a95392cbd4595b3837fe900b7e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

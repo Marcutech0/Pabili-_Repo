@@ -11,6 +11,7 @@ public class CustomerSpawner : MonoBehaviour
     public ProductData[] availableProducts;
 
     private CustomerAI currentCustomer;
+    public CustomerDropZone customerDropZone;
 
     public void SpawnCustomer()
     {
@@ -20,6 +21,7 @@ public class CustomerSpawner : MonoBehaviour
 
         GameObject newCustomer = Instantiate(prefabToSpawn, spawnPoint.position, Quaternion.identity);
         currentCustomer = newCustomer.GetComponent<CustomerAI>();
+        customerDropZone.customer = currentCustomer;
 
         if (currentCustomer != null && availableProducts.Length > 0)
         {

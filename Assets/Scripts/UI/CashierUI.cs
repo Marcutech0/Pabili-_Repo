@@ -14,7 +14,7 @@ public class CashierUI : MonoBehaviour
 
     [Header("Feedback Settings")]
     public float errorDisplayDuration = 1.5f;
-    public float shakeIntensity = 10f;
+    public float shakeIntensity = 3f;
     public float successDisplayDuration = 1f;
 
     private int correctChange;

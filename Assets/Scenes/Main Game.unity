@@ -702,6 +702,7 @@ MonoBehaviour:
   availableProducts:
   - {fileID: 11400000, guid: e359b9d1410c4584d88945800196c5d9, type: 2}
   - {fileID: 11400000, guid: 9f9cda04b6066aa45b2c95bc19f305c7, type: 2}
+  customerDropZone: {fileID: 794706386}
 --- !u!4 &169198709
 Transform:
   m_ObjectHideFlags: 0
@@ -2918,6 +2919,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 783311628}
   m_CullTransparentMesh: 1
+--- !u!114 &794706386 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6371576491159128454, guid: dccfc26ff9c4fa44cbae427590796029, type: 3}
+  m_PrefabInstance: {fileID: 153333812231312370}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d26b38e299432e4c930ca5df044421e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &803833161
 GameObject:
   m_ObjectHideFlags: 0
@@ -5688,8 +5700,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   productPrefabs:
-  - {fileID: 2755786923387791862, guid: b7d649d0b33adaf4d8443066d2c5d354, type: 3}
-  - {fileID: 2755786923387791862, guid: 3f3d26adf7a21814b849616012f99f9c, type: 3}
+  - {fileID: 2755786923387791862, guid: 3862a16227b2e534e9d89399742b58c7, type: 3}
   - {fileID: 2755786923387791862, guid: 5bc154a97f18c4b4fb42fca3e560347c, type: 3}
 --- !u!1 &1097348232
 GameObject:
@@ -6431,7 +6442,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1338642386
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6523,7 +6534,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1389923040
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9380,6 +9391,10 @@ PrefabInstance:
     - target: {fileID: 2410421672857547068, guid: dccfc26ff9c4fa44cbae427590796029, type: 3}
       propertyPath: m_Name
       value: ProductRelease
+      objectReference: {fileID: 0}
+    - target: {fileID: 2410421672857547068, guid: dccfc26ff9c4fa44cbae427590796029, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5644651035336345234, guid: dccfc26ff9c4fa44cbae427590796029, type: 3}
       propertyPath: m_SortingOrder
